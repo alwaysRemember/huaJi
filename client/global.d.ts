@@ -2,8 +2,8 @@
  * @Author: Always
  * @LastEditors: Always
  * @Date: 2020-12-15 17:21:22
- * @LastEditTime: 2020-12-15 17:33:57
- * @FilePath: /huaJi/global.d.ts
+ * @LastEditTime: 2020-12-16 16:57:27
+ * @FilePath: /huaJi/client/global.d.ts
  */
 declare module '*.png';
 declare module '*.gif';
@@ -36,3 +36,6 @@ declare const process: {
 declare interface Window {
   [key: string]: any;
 }
+declare const wx: {
+  cloud: any;
+};

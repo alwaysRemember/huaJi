@@ -12,7 +12,7 @@ const Index = () => {
       .callFunction({
         name: 'test',
       })
-      .then((res) => {
+      .then(res => {
         console.log(res);
       });
   }, []);

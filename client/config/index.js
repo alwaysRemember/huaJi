@@ -2,8 +2,8 @@
  * @Author: Always
  * @LastEditors: Always
  * @Date: 2020-12-15 17:21:22
- * @LastEditTime: 2020-12-15 17:41:53
- * @FilePath: /huaJi/config/index.js
+ * @LastEditTime: 2020-12-16 16:01:42
+ * @FilePath: /huaJi/client/config/index.js
  */
 const config = {
   projectName: 'huaJi',

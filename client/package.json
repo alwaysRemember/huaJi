@@ -14,17 +14,6 @@
     "prettier": "prettier --write '**/*.{js,jsx,tsx,ts,scss,md,json}'",
     "mock": "mocker ./mock"
   },
-  "gitHooks": {
-    "pre-commit": "lint-staged"
-  },
-  "lint-staged": {
-    "*.{js,jsx,less,md,json}": [
-      "prettier --write"
-    ],
-    "*.ts?(x)": [
-      "prettier --parser=typescript --write"
-    ]
-  },
   "browserslist": [
     "last 3 versions",
     "Android >= 4.1",

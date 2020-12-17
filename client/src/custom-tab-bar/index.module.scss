@@ -16,6 +16,7 @@
     height: calc(100px + env(safe-area-inset-bottom));
     border-top: 1px solid #ccc;
     .tab-bar-item {
+      box-sizing: border-box;
       flex: 1;
       &.select {
         .text {

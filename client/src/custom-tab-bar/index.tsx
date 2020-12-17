@@ -9,7 +9,7 @@ import { setClassName } from '../utils';
 import { ETabBarEnum } from './enums';
 import { useMappedState } from 'redux-react-hook';
 import { IReducers } from '../interface/store';
-const tabBar = props => {
+const tabBar = () => {
   const { tabBarSelect }: IReducers = useMappedState(state => state);
   const [tabBarList, setTabBarList] = useState<Array<ITabBarItem>>([
     {

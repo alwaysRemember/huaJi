@@ -1,0 +1,33 @@
+.login-wrapper {
+  box-sizing: border-box;
+  padding: 40px 0;
+  min-height: 100%;
+  .logo-wrapper {
+    width: 180px;
+    height: 180px;
+    border-radius: 20px;
+    margin: 0 auto 10px;
+  }
+
+  .content {
+    width: 710px;
+    margin: 0 auto;
+    .msg {
+      display: block;
+      font-size: 28px;
+      line-height: 28px;
+      text-align: center;
+      color: #333;
+      margin-bottom: 10px;
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+    .btn-wrapper {
+      margin-top: 30px;
+      .authorize {
+        margin-bottom: 20px;
+      }
+    }
+  }
+}

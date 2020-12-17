@@ -2,7 +2,7 @@
  * @Author: Always
  * @LastEditors: Always
  * @Date: 2020-12-17 11:48:15
- * @LastEditTime: 2020-12-17 11:52:16
+ * @LastEditTime: 2020-12-17 12:15:39
  * @FilePath: /huaJi/client/src/store/actions/global.ts
  */
 

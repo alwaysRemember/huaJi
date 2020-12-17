@@ -2,11 +2,15 @@
  * @Author: Always
  * @LastEditors: Always
  * @Date: 2020-12-15 17:21:22
- * @LastEditTime: 2020-12-16 21:04:28
+ * @LastEditTime: 2020-12-17 20:10:18
  * @FilePath: /huaJi/client/src/app.config.ts
  */
 export default {
-  pages: ['pages/Home/index', 'pages/PersonalCenter/index'],
+  pages: [
+    'pages/Home/index',
+    'pages/Login/index',
+    'pages/PersonalCenter/index',
+  ],
   window: {
     backgroundTextStyle: 'light',
     navigationBarBackgroundColor: '#fff',

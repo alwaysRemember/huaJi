@@ -1,0 +1,40 @@
+.image-preload-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  .image-preload {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: #ccc;
+    border-radius: 14px;
+    .icon {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      color: #e6e6e6;
+      font-size: 58px;
+      font-weight: bold;
+      transform: translate(-50%, -50%);
+      &.loading-icon {
+        animation: loading-move 2s linear infinite;
+      }
+    }
+  }
+  .image {
+    width: 100%;
+    height: 100% !important;
+    &.error {
+      width: 0;
+      height: 0;
+    }
+  }
+  @keyframes loading-move {
+    from {
+      transform: translate(-50%, -50%) rotate(0);
+    }
+    to {
+      transform: translate(-50%, -50%) rotate(360deg);
+    }
+  }
+}

@@ -10,7 +10,7 @@ import { setClassName } from '../../utils';
 
 const CategoryList = () => {
   const [exportList, setExportList] = useState<Array<ICategoryListItem>>(
-    [...Array(9).keys()].map(i => ({
+    [...Array(15).keys()].map(i => ({
       id: `${i}`,
       type: ECategoryTypeEnum.EXPORT,
       name: '',

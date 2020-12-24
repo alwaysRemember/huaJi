@@ -2,7 +2,7 @@
  * @Author: Always
  * @LastEditors: Always
  * @Date: 2020-12-17 17:19:35
- * @LastEditTime: 2020-12-17 20:09:35
+ * @LastEditTime: 2020-12-24 14:07:21
  * @FilePath: /huaJi/server/login/index.js
  */
 const cloud = require('wx-server-sdk');
@@ -69,7 +69,6 @@ exports.main = async ({
       message: '成功',
     };
   } catch (e) {
-    console.log(e);
     return {
       code: -1,
       message: '登录失败',

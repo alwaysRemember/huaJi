@@ -2,7 +2,7 @@
  * @Author: Always
  * @LastEditors: Always
  * @Date: 2020-06-24 21:31:22
- * @LastEditTime: 2020-12-17 19:26:18
+ * @LastEditTime: 2020-12-24 14:41:33
  * @FilePath: /huaJi/client/src/utils/wxUtils.ts
  */
 import Taro from '@tarojs/taro';
@@ -41,7 +41,7 @@ export const showToast = ({
  */
 export const request = async <T = null>(
   requestName: string,
-  params: any,
+  params?: any,
 ): Promise<T> => {
   wx.cloud.init();
   Taro.showLoading({
@@ -54,7 +54,7 @@ export const request = async <T = null>(
         result: { code, data, message },
       } = await wx.cloud.callFunction({
         name: requestName,
-        data: params,
+        data: params || {},
       });
       switch (code) {
         case 0:
@@ -69,8 +69,6 @@ export const request = async <T = null>(
           res(data);
       }
     } catch (e) {
-      console.log(e);
-
       showToast({
         title: '服务器出错，请稍后重试',
       });

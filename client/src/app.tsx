@@ -10,7 +10,7 @@ class App extends Component {
   render() {
     return (
       <StoreContext.Provider value={store}>
-        ;{this.props.children}
+        {this.props.children}
       </StoreContext.Provider>
     );
   }

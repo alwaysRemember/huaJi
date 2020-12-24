@@ -1,15 +1,22 @@
-import { View, Text } from '@tarojs/components';
+import { View, Text, Image } from '@tarojs/components';
 import Taro from '@tarojs/taro';
 import React, { useEffect, useState } from 'react';
-import ImagePreload from '../../components/ImagePreload';
 import { AtSegmentedControl } from 'taro-ui';
 import { getCategoryList } from '../../api';
 import styles from './index.module.scss';
 import { ICategoryListItem } from './interface';
 import { ECategoryTypeEnum } from './enums';
+import { setClassName } from '../../utils';
 
 const CategoryList = () => {
-  const [exportList, setExportList] = useState<Array<ICategoryListItem>>([]);
+  const [exportList, setExportList] = useState<Array<ICategoryListItem>>(
+    [...Array(9).keys()].map(i => ({
+      id: `${i}`,
+      type: ECategoryTypeEnum.EXPORT,
+      name: '',
+      icon: '',
+    })),
+  );
   const [incomeList, setIncomeList] = useState<Array<ICategoryListItem>>([]);
   const [currentTabIndex, setCurrentTabIndex] = useState<number>(0);
   const getData = async () => {
@@ -40,10 +47,17 @@ const CategoryList = () => {
           >
             <View className={styles['icon-wrapper']}>
               <View className={styles['icon']}>
-                <ImagePreload src={icon} width={64} height={64} />
+                <Image src={icon} className={styles['icon']} />
               </View>
             </View>
-            <Text className={styles['name']}>{name}</Text>
+            <Text
+              className={setClassName([
+                styles['name'],
+                name ? '' : styles['skeleton-name'],
+              ])}
+            >
+              {name}
+            </Text>
           </View>
         ))}
       </View>

@@ -1,7 +1,7 @@
 import { CoverView, CoverImage, Text } from '@tarojs/components';
 import Taro from '@tarojs/taro';
 import React, { useEffect, useState } from 'react';
-import { homePath, personalCenterPath } from '../router';
+import { categoryListPath, homePath, personalCenterPath } from '../router';
 import { AtButton } from 'taro-ui';
 import styles from './index.module.scss';
 import { ITabBarItem } from './interface';
@@ -22,6 +22,16 @@ const tabBar = () => {
         'https://6875-huaji-server-prod-2egmhbb1fd0438-1304528052.tcb.qcloud.la/home_select.png?sign=ef53569b48dc05c5b97ed32839f658ea&t=1608801787',
       isSelect: true,
       isTabBarPage: true,
+    },
+    {
+      id: ETabBarEnum.ADD_RECORD,
+      path: categoryListPath(),
+      icon:
+        'https://6875-huaji-server-prod-2egmhbb1fd0438-1304528052.tcb.qcloud.la/add.png?sign=15555aec87af0092803116668e88544c&t=1608802824',
+      selectIcon:
+        'https://6875-huaji-server-prod-2egmhbb1fd0438-1304528052.tcb.qcloud.la/add.png?sign=15555aec87af0092803116668e88544c&t=1608802824',
+      isSelect: true,
+      isTabBarPage: false,
     },
     {
       id: ETabBarEnum.PERSONAL_CENTER,
@@ -68,6 +78,7 @@ const tabBar = () => {
             className={setClassName([
               styles['tab-bar-item'],
               isSelect ? styles['select'] : '',
+              id === ETabBarEnum.ADD_RECORD ? styles['add-record'] : '',
             ])}
             onClick={() => {
               tabBarClick(index);

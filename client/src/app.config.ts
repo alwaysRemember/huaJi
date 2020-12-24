@@ -2,7 +2,7 @@
  * @Author: Always
  * @LastEditors: Always
  * @Date: 2020-12-15 17:21:22
- * @LastEditTime: 2020-12-24 14:12:39
+ * @LastEditTime: 2020-12-24 17:24:37
  * @FilePath: /huaJi/client/src/app.config.ts
  */
 export default {
@@ -19,7 +19,7 @@ export default {
     navigationBarTextStyle: 'black',
   },
   tabBar: {
-    selectedColor: '#E93B3D',
+    selectedColor: '#6ac5d7',
     color: '#707070',
     custom: true,
     usingComponents: {},

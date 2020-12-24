@@ -2,7 +2,7 @@
  * @Author: Always
  * @LastEditors: Always
  * @Date: 2020-06-24 21:31:22
- * @LastEditTime: 2020-12-24 14:41:33
+ * @LastEditTime: 2020-12-24 16:43:51
  * @FilePath: /huaJi/client/src/utils/wxUtils.ts
  */
 import Taro from '@tarojs/taro';
@@ -43,7 +43,9 @@ export const request = async <T = null>(
   requestName: string,
   params?: any,
 ): Promise<T> => {
-  wx.cloud.init();
+  wx.cloud.init({
+    env: 'huaji-server-prod-2egmhbb1fd0438',
+  });
   Taro.showLoading({
     title: '请稍等...',
     mask: true,

@@ -17,9 +17,9 @@ const tabBar = () => {
       path: homePath(),
       title: '主页',
       icon:
-        'https://6875-huaji-server-prod-2egmhbb1fd0438-1304528052.tcb.qcloud.la/home.png?sign=036cc39325bf4ed9841ed48ef712e665&t=1608124226',
+        'https://6875-huaji-server-prod-2egmhbb1fd0438-1304528052.tcb.qcloud.la/home.png?sign=38a92e894fe68c38959e92c375edf989&t=1608801773',
       selectIcon:
-        'https://6875-huaji-server-prod-2egmhbb1fd0438-1304528052.tcb.qcloud.la/home_select.png?sign=f7a45939ef735d202cbd69c6b8b37939&t=1608124235',
+        'https://6875-huaji-server-prod-2egmhbb1fd0438-1304528052.tcb.qcloud.la/home_select.png?sign=ef53569b48dc05c5b97ed32839f658ea&t=1608801787',
       isSelect: true,
       isTabBarPage: true,
     },
@@ -30,7 +30,7 @@ const tabBar = () => {
       icon:
         'https://6875-huaji-server-prod-2egmhbb1fd0438-1304528052.tcb.qcloud.la/personal_center.png?sign=b34f20db8b88a87e25e54d0e4be3cf13&t=1608124183',
       selectIcon:
-        'https://6875-huaji-server-prod-2egmhbb1fd0438-1304528052.tcb.qcloud.la/personal_center_select.png?sign=7cf44fccd2fe6c8fbfbf20a8262eaf90&t=1608124212',
+        'https://6875-huaji-server-prod-2egmhbb1fd0438-1304528052.tcb.qcloud.la/personal_center_select.png?sign=79c4e6e32c9926dc35d56704e2f82401&t=1608801539',
       isSelect: false,
       isTabBarPage: true,
     },

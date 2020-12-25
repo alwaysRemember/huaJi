@@ -1,0 +1,108 @@
+.keyboard-modal-wrapper {
+  display: block;
+  :global {
+    .at-modal__container {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: transparent;
+      transform: none;
+    }
+  }
+  .keyboard-modal-con {
+    padding-bottom: constant(safe-area-inset-bottom);
+    padding-bottom: env(safe-area-inset-bottom);
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background: #fff;
+    .keyboard-con-top {
+      padding: 0 20px;
+      box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      .reamrks {
+        box-sizing: border-box;
+        height: 100px;
+        margin-left: 0;
+      }
+      .money {
+        flex: 1;
+        height: 100px;
+        line-height: 100px;
+        font-size: 32px;
+        font-weight: bold;
+        text-align: right;
+      }
+    }
+    .keyboard-list {
+      padding: 10px;
+      padding-top: 0;
+      box-sizing: border-box;
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(4, 25%);
+      grid-template-columns: 4;
+      .keyboard-item {
+        box-sizing: border-box;
+        &.0,
+        &.1,
+        &.2,
+        &.3,
+        &.4,
+        &.5,
+        &.6,
+        &.7,
+        &.8,
+        &.9,
+        &.10 {
+          padding-right: 10px;
+        }
+        &.1,
+        &.2,
+        &.3,
+        &.4,
+        &.5,
+        &.6,
+        &.7,
+        &.8,
+        &.9,
+        &.11,
+        &.12 {
+          padding-bottom: 10px;
+        }
+        &.0 {
+          grid-column: 2 / span 2;
+          grid-row: 4 / span 1;
+        }
+        &.10 {
+          grid-column: 1 / span 1;
+          grid-row: 4 / span 1;
+        }
+        &.11 {
+          grid-row: 2 / span 1;
+          grid-column: 4 / span 1;
+        }
+        &.12 {
+          grid-row: 1 / span 1;
+          grid-column: 4 / span 1;
+        }
+        &.13 {
+          grid-row: 3 / span 2;
+          grid-column: 4 / span 1;
+        }
+        .keyboard-item-btn {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          width: 100%;
+          height: 100%;
+          &.date {
+            font-size: 26px;
+          }
+        }
+      }
+    }
+  }
+}

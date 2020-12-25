@@ -8,6 +8,9 @@
     left: 0;
     background: #ccc;
     border-radius: 14px;
+    &.no-bg {
+      background: transparent;
+    }
     .icon {
       position: absolute;
       left: 50%;

@@ -1,12 +1,18 @@
 import { View, Text, Image } from '@tarojs/components';
 import Taro from '@tarojs/taro';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { AtSegmentedControl } from 'taro-ui';
 import { getCategoryList } from '../../api';
 import styles from './index.module.scss';
 import { ICategoryListItem } from './interface';
 import { ECategoryTypeEnum } from './enums';
 import { setClassName } from '../../utils';
+import KeyboardModal from '../../components/KeyboardModal';
+import {
+  IKeyboardInputData,
+  IKeyboardRefParams,
+} from '../../components/KeyboardModal/interface';
+import ImagePreload from '../../components/ImagePreload';
 
 const CategoryList = () => {
   const [exportList, setExportList] = useState<Array<ICategoryListItem>>(
@@ -19,6 +25,13 @@ const CategoryList = () => {
   );
   const [incomeList, setIncomeList] = useState<Array<ICategoryListItem>>([]);
   const [currentTabIndex, setCurrentTabIndex] = useState<number>(0);
+  const [
+    currentCategory,
+    setCurrentCategory,
+  ] = useState<ICategoryListItem | null>(null);
+
+  const keyboardModalRef = useRef<IKeyboardRefParams>(null);
+
   const getData = async () => {
     try {
       const { exportList, incomeList } = await getCategoryList();
@@ -27,9 +40,16 @@ const CategoryList = () => {
     } catch (e) {}
   };
 
-  const categoryClick = (id: string, type: ECategoryTypeEnum) => {
-    console.log(id, type);
+  const categoryClick = (data: ICategoryListItem) => {
+    setCurrentCategory(data);
+    keyboardModalRef.current?.changeShow(true);
   };
+
+  const submit = (data: IKeyboardInputData) => {
+    console.log(data);
+    keyboardModalRef.current?.changeShow(false);
+  };
+
   useEffect(() => {
     getData();
   }, []);
@@ -37,26 +57,31 @@ const CategoryList = () => {
   const CategoryList = ({ list }: { list: Array<ICategoryListItem> }) => {
     return (
       <View className={styles['category-list-con']}>
-        {list.map(({ id, name, icon, type }) => (
+        {list.map(item => (
           <View
             className={styles['category-item']}
-            key={id}
+            key={item.id}
             onClick={() => {
-              categoryClick(id, type);
+              categoryClick(item);
             }}
           >
             <View className={styles['icon-wrapper']}>
               <View className={styles['icon']}>
-                <Image src={icon} className={styles['icon']} />
+                <ImagePreload
+                  src={item.icon}
+                  width={64}
+                  height={64}
+                  hasBg={false}
+                />
               </View>
             </View>
             <Text
               className={setClassName([
                 styles['name'],
-                name ? '' : styles['skeleton-name'],
+                item.name ? '' : styles['skeleton-name'],
               ])}
             >
-              {name}
+              {item.name}
             </Text>
           </View>
         ))}
@@ -78,6 +103,9 @@ const CategoryList = () => {
       <View className={styles['category-list-con-wrapper']}>
         <CategoryList list={currentTabIndex === 0 ? exportList : incomeList} />
       </View>
+
+      {/* 键盘输入modal */}
+      <KeyboardModal cref={keyboardModalRef} submit={submit} />
     </View>
   );
 };

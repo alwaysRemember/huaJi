@@ -11,6 +11,7 @@ const ImagePreload = ({
   width,
   height,
   borderRadius = 0,
+  hasBg = true,
 }: IImagePreload) => {
   const [isLoad, setIsLoad] = useState<boolean>(false); // 是否加载成功
   const [isError, setIsError] = useState<boolean>(false); // 是否加载失败
@@ -19,7 +20,7 @@ const ImagePreload = ({
     <View className={styles['image-preload-wrapper']}>
       {(!isLoad || isError) && (
         <View
-          className={styles['image-preload']}
+          className={setClassName([styles['image-preload'], styles['no-bg']])}
           style={{
             width: pxTransform(width),
             height: pxTransform(height),

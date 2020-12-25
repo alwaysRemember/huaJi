@@ -1,6 +1,6 @@
 import { View, Text, Image } from '@tarojs/components';
 import Taro from '@tarojs/taro';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { AtSegmentedControl } from 'taro-ui';
 import { getCategoryList } from '../../api';
 import styles from './index.module.scss';
@@ -55,37 +55,40 @@ const CategoryList = () => {
   }, []);
 
   const CategoryList = ({ list }: { list: Array<ICategoryListItem> }) => {
-    return (
-      <View className={styles['category-list-con']}>
-        {list.map(item => (
-          <View
-            className={styles['category-item']}
-            key={item.id}
-            onClick={() => {
-              categoryClick(item);
-            }}
-          >
-            <View className={styles['icon-wrapper']}>
-              <View className={styles['icon']}>
-                <ImagePreload
-                  src={item.icon}
-                  width={64}
-                  height={64}
-                  hasBg={false}
-                />
-              </View>
-            </View>
-            <Text
-              className={setClassName([
-                styles['name'],
-                item.name ? '' : styles['skeleton-name'],
-              ])}
+    return useMemo(
+      () => (
+        <View className={styles['category-list-con']}>
+          {list.map(item => (
+            <View
+              className={styles['category-item']}
+              key={item.id}
+              onClick={() => {
+                categoryClick(item);
+              }}
             >
-              {item.name}
-            </Text>
-          </View>
-        ))}
-      </View>
+              <View className={styles['icon-wrapper']}>
+                <View className={styles['icon']}>
+                  <ImagePreload
+                    src={item.icon}
+                    width={64}
+                    height={64}
+                    hasBg={false}
+                  />
+                </View>
+              </View>
+              <Text
+                className={setClassName([
+                  styles['name'],
+                  item.name ? '' : styles['skeleton-name'],
+                ])}
+              >
+                {item.name}
+              </Text>
+            </View>
+          ))}
+        </View>
+      ),
+      [list],
     );
   };
   return (

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Taro, { pxTransform } from '@tarojs/taro';
 import { IImagePreload } from './interface';
 import { View, Image } from '@tarojs/components';
@@ -16,49 +16,55 @@ const ImagePreload = ({
   const [isLoad, setIsLoad] = useState<boolean>(false); // 是否加载成功
   const [isError, setIsError] = useState<boolean>(false); // 是否加载失败
 
-  return (
-    <View className={styles['image-preload-wrapper']}>
-      {(!isLoad || isError) && (
-        <View
-          className={setClassName([styles['image-preload'], styles['no-bg']])}
+  return useMemo(
+    () => (
+      <View className={styles['image-preload-wrapper']}>
+        {(!isLoad || isError) && (
+          <View
+            className={setClassName([styles['image-preload'], styles['no-bg']])}
+            style={{
+              width: pxTransform(width),
+              height: pxTransform(height),
+            }}
+          >
+            {(isError && (
+              <AtIcon
+                prefixClass="icon"
+                value="tupianjiazaishibai"
+                className={styles['icon']}
+              />
+            )) || (
+              <AtIcon
+                value="loading-2"
+                className={setClassName([
+                  styles['icon'],
+                  styles['loading-icon'],
+                ])}
+              />
+            )}
+          </View>
+        )}
+        <Image
+          src={src}
+          mode="widthFix"
+          lazyLoad
+          className={setClassName([
+            styles['image'],
+            isError ? styles['error'] : '',
+          ])}
           style={{
-            width: pxTransform(width),
-            height: pxTransform(height),
+            borderRadius: pxTransform(borderRadius),
           }}
-        >
-          {(isError && (
-            <AtIcon
-              prefixClass="icon"
-              value="tupianjiazaishibai"
-              className={styles['icon']}
-            />
-          )) || (
-            <AtIcon
-              value="loading-2"
-              className={setClassName([styles['icon'], styles['loading-icon']])}
-            />
-          )}
-        </View>
-      )}
-      <Image
-        src={src}
-        mode="widthFix"
-        lazyLoad
-        className={setClassName([
-          styles['image'],
-          isError ? styles['error'] : '',
-        ])}
-        style={{
-          borderRadius: pxTransform(borderRadius),
-        }}
-        onLoad={() => {
-          setIsLoad(true);
-        }}
-        onError={() => {
-          setIsError(true);
-        }}
-      />
-    </View>
+          onLoad={() => {
+            setIsLoad(true);
+          }}
+          onError={() => {
+            setIsError(true);
+          }}
+        />
+      </View>
+    ),
+    [src, isLoad, isError],
   );
 };
 

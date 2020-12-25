@@ -47,7 +47,7 @@ const CategoryList = () => {
 
   const submit = (data: IKeyboardInputData) => {
     console.log(data);
-    keyboardModalRef.current?.changeShow(false);
+    keyboardModalRef.current?.resetData();
   };
 
   useEffect(() => {

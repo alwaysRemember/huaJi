@@ -13,6 +13,9 @@ const KeyboardModal = ({ cref, submit }: IKeyboardModalProps) => {
     changeShow(type) {
       setShow(type);
     },
+    resetData() {
+      hideKeyboardModal();
+    },
   }));
 
   const keyBoardViewVal: { [key: number]: string } = {

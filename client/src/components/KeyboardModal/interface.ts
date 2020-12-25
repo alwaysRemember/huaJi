@@ -2,7 +2,7 @@
  * @Author: Always
  * @LastEditors: Always
  * @Date: 2020-12-25 15:04:08
- * @LastEditTime: 2020-12-25 18:28:34
+ * @LastEditTime: 2020-12-25 19:03:06
  * @FilePath: /huaJi/client/src/components/KeyboardModal/interface.ts
  */
 
@@ -14,6 +14,7 @@ export interface IKeyboardModalProps {
 }
 export interface IKeyboardRefParams {
   changeShow: (type: boolean) => void;
+  resetData: () => void;
 }
 
 export interface IKeyboardInputData {

@@ -13,6 +13,8 @@ import {
   IKeyboardRefParams,
 } from '../../components/KeyboardModal/interface';
 import ImagePreload from '../../components/ImagePreload';
+import { request, showToast } from '../../utils/wxUtils';
+import { EToastIcon } from '../../enums/EWXUtils';
 
 const CategoryList = () => {
   const [exportList, setExportList] = useState<Array<ICategoryListItem>>(
@@ -45,8 +47,27 @@ const CategoryList = () => {
     keyboardModalRef.current?.changeShow(true);
   };
 
-  const submit = (data: IKeyboardInputData) => {
-    console.log(data);
+  const submit = async ({ remarks, money, date }: IKeyboardInputData) => {
+    if (!currentCategory) {
+      showToast({
+        title: '请选择要记录的分类',
+      });
+      return;
+    }
+    const { id: categoryId, type: categoryType } = currentCategory;
+
+    await request('saveBillingRecord', {
+      remarks,
+      money,
+      date,
+      categoryId,
+      categoryType,
+    });
+    showToast({
+      icon: EToastIcon.SUCCESS,
+      title: '新增记录成功',
+    });
+
     keyboardModalRef.current?.resetData();
   };
 

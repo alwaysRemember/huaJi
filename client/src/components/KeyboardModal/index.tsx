@@ -43,7 +43,7 @@ const KeyboardModal = ({ cref, submit }: IKeyboardModalProps) => {
    * @param k
    */
   const keyboardClick = (k: number) => {
-    Taro.vibrateShort();
+    // Taro.vibrateShort();
     let val = money;
     switch (k) {
       case 11:

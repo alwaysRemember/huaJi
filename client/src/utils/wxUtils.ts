@@ -2,10 +2,11 @@
  * @Author: Always
  * @LastEditors: Always
  * @Date: 2020-06-24 21:31:22
- * @LastEditTime: 2020-12-24 16:43:51
+ * @LastEditTime: 2020-12-28 15:52:53
  * @FilePath: /huaJi/client/src/utils/wxUtils.ts
  */
 import Taro from '@tarojs/taro';
+import { loginPath } from '../router';
 import { EToastIcon } from '../enums/EWXUtils';
 
 /**
@@ -65,6 +66,15 @@ export const request = async <T = null>(
         case -1:
           showToast({
             title: message,
+          });
+          break;
+        case -2:
+          showToast({
+            title: message,
+          }).then(() => {
+            Taro.navigateTo({
+              url: loginPath(),
+            });
           });
           break;
         default:

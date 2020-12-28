@@ -2,7 +2,7 @@
  * @Author: Always
  * @LastEditors: Always
  * @Date: 2020-12-24 14:32:25
- * @LastEditTime: 2020-12-24 14:43:17
+ * @LastEditTime: 2020-12-28 15:16:11
  * @FilePath: /huaJi/server/getCategoryList/index.js
  */
 const cloud = require('wx-server-sdk');

@@ -2,7 +2,7 @@
  * @Author: Always
  * @LastEditors: Always
  * @Date: 2020-12-17 17:19:35
- * @LastEditTime: 2020-12-24 14:07:21
+ * @LastEditTime: 2020-12-29 13:58:48
  * @FilePath: /huaJi/server/login/index.js
  */
 const cloud = require('wx-server-sdk');
@@ -60,7 +60,12 @@ exports.main = async ({
       });
     } else {
       await collection.add({
-        data: { ...data, createTime: new Date(), updateTime: new Date() },
+        data: {
+          ...data,
+          monthMaxMoney: 0,
+          createTime: new Date(),
+          updateTime: new Date(),
+        },
       });
     }
     return {

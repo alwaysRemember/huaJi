@@ -2,7 +2,7 @@
  * @Author: Always
  * @LastEditors: Always
  * @Date: 2020-12-28 15:08:50
- * @LastEditTime: 2020-12-28 15:59:51
+ * @LastEditTime: 2020-12-29 15:58:16
  * @FilePath: /huaJi/server/saveBillingRecord/index.js
  */
 
@@ -39,18 +39,50 @@ exports.main = async ({ categoryId, categoryType, date, money, remarks }) => {
       .get();
     if (!categoryResult) await Promise.reject('获取不到当前账单分类');
 
-    // 新增
-    await db.collection('tb_billing_record').add({
-      data: {
-        userId: userResult._id,
-        categoryId,
-        categoryType,
-        recordDate: new Date(date),
-        money,
-        remarks,
-        createTime: new Date(),
-        updateTime: new Date(),
-      },
+    await db.runTransaction(async transaction => {
+      const { _id } = userResult;
+      // 新增记录
+      await transaction.collection('tb_billing_record').add({
+        data: {
+          userId: _id,
+          categoryId,
+          categoryType,
+          recordDate: new Date(date),
+          money,
+          remarks,
+          createTime: new Date(),
+          updateTime: new Date(),
+        },
+      });
+      // 获取当前的时间
+      const d = new Date();
+      const nowTime = `${d.getFullYear()}-${d.getMonth() + 1}`; // YYYY-MM
+
+      // 查询用户已使用数据表，是否有当前用户的使用记录
+      const tbUserAmountUsed = transaction.collection('tb_user_amount_used');
+      const { data: userAmountUsed } = await tbUserAmountUsed
+        .where({
+          openid,
+          date: nowTime,
+        })
+        .get();
+
+      if (userAmountUsed.length) {
+        const [{ _id, amountUsed }] = userAmountUsed;
+        await tbUserAmountUsed.doc(_id).update({
+          data: {
+            amountUsed: amountUsed + money,
+          },
+        });
+      } else {
+        await tbUserAmountUsed.add({
+          data: {
+            openid,
+            date: nowTime,
+            amountUsed: money,
+          },
+        });
+      }
     });
     return {
       code: 0,

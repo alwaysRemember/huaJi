@@ -17,6 +17,8 @@
     height: calc(100px+ constant(safe-area-inset-bottom));
     height: calc(100px + env(safe-area-inset-bottom));
     border-top: 1px solid #ccc;
+    z-index: 99;
+    background: #fff;
     .tab-bar-item {
       box-sizing: border-box;
       flex: 1;

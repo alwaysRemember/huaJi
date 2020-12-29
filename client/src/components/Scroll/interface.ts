@@ -10,4 +10,5 @@ export interface IScrollProps {
   page: number;
   totalPage: number;
   updatePage: (page: number) => void;
+  isGetData: boolean;
 }

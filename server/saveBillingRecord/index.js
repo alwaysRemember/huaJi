@@ -2,7 +2,7 @@
  * @Author: Always
  * @LastEditors: Always
  * @Date: 2020-12-28 15:08:50
- * @LastEditTime: 2020-12-29 15:58:16
+ * @LastEditTime: 2020-12-29 18:16:15
  * @FilePath: /huaJi/server/saveBillingRecord/index.js
  */
 
@@ -11,7 +11,9 @@ cloud.init({
   env: 'huaji-server-prod-2egmhbb1fd0438',
 });
 
-const db = cloud.database();
+const db = cloud.database({
+  throwOnNotFound: false,
+});
 
 exports.main = async ({ categoryId, categoryType, date, money, remarks }) => {
   try {
@@ -55,7 +57,7 @@ exports.main = async ({ categoryId, categoryType, date, money, remarks }) => {
         },
       });
       // 获取当前的时间
-      const d = new Date();
+      const d = new Date(date);
       const nowTime = `${d.getFullYear()}-${d.getMonth() + 1}`; // YYYY-MM
 
       // 查询用户已使用数据表，是否有当前用户的使用记录
@@ -67,6 +69,8 @@ exports.main = async ({ categoryId, categoryType, date, money, remarks }) => {
         })
         .get();
 
+      //只有支出的才需要计算使用额度
+      if (categoryType !== 'export') return;
       if (userAmountUsed.length) {
         const [{ _id, amountUsed }] = userAmountUsed;
         await tbUserAmountUsed.doc(_id).update({
@@ -83,6 +87,7 @@ exports.main = async ({ categoryId, categoryType, date, money, remarks }) => {
           },
         });
       }
+      return;
     });
     return {
       code: 0,

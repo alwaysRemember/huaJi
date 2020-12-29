@@ -2,9 +2,11 @@
  * @Author: Always
  * @LastEditors: Always
  * @Date: 2020-12-16 17:54:16
- * @LastEditTime: 2020-12-28 18:49:01
+ * @LastEditTime: 2020-12-29 17:30:24
  * @FilePath: /huaJi/client/src/pages/Home/interface.ts
  */
+
+import { ECategoryTypeEnum } from '../CategoryList/enums';
 
 export interface IHomeResponseData {
   monthMaxMoney: number;
@@ -20,8 +22,10 @@ export interface IHomeRequestData {
 }
 
 export interface IRecordItem {
+  id: string;
+  categoryType: ECategoryTypeEnum;
   categoryName: string;
   money: number;
-  records: string;
+  remarks: string;
   recordDate: Date;
 }

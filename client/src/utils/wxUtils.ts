@@ -2,7 +2,7 @@
  * @Author: Always
  * @LastEditors: Always
  * @Date: 2020-06-24 21:31:22
- * @LastEditTime: 2020-12-28 15:52:53
+ * @LastEditTime: 2020-12-29 18:21:30
  * @FilePath: /huaJi/client/src/utils/wxUtils.ts
  */
 import Taro from '@tarojs/taro';
@@ -43,14 +43,16 @@ export const showToast = ({
 export const request = async <T = null>(
   requestName: string,
   params?: any,
+  showLoading: boolean = true,
 ): Promise<T> => {
   wx.cloud.init({
     env: 'huaji-server-prod-2egmhbb1fd0438',
   });
-  Taro.showLoading({
-    title: '请稍等...',
-    mask: true,
-  });
+  showLoading &&
+    Taro.showLoading({
+      title: '请稍等...',
+      mask: true,
+    });
   return new Promise(async res => {
     try {
       const {
@@ -85,7 +87,7 @@ export const request = async <T = null>(
         title: '服务器出错，请稍后重试',
       });
     } finally {
-      Taro.hideLoading();
+      showLoading && Taro.hideLoading();
     }
   });
 };

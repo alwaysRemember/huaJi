@@ -1,12 +1,10 @@
 @import '../../common/css/custom-theme.scss';
 .home-wrapper {
-  box-sizing: border-box;
-  padding: 20px 0;
   display: flex;
   flex-direction: column;
   height: 100%;
   .top-info-wrapper {
-    height: 180px;
+    height: 200px;
     .top-info-con {
       position: fixed;
       top: 0;
@@ -14,6 +12,7 @@
       display: flex;
       width: 100%;
       height: 200px;
+      z-index: 2;
       .baofu-icon {
         width: 180px;
         height: 200px;
@@ -77,9 +76,82 @@
   .billing-record-wrapper {
     overflow: hidden;
     flex: 1;
-    .record-list {
-      overflow: hidden;
-      height: 100%;
+    .record-wrapper {
+      position: relative;
+      min-height: 100%;
+      .record-item {
+        padding: 20px 0;
+        box-sizing: border-box;
+        width: 710px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 1px solid #efefef;
+        margin: 0 auto;
+        &:last-child {
+          border: none;
+        }
+        .record-date {
+          flex: 1;
+          text-align: left;
+          font-size: 24px;
+          color: #333;
+        }
+        .category {
+          box-sizing: border-box;
+          padding: 0 20px;
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          .label,
+          .remarks {
+            text-align: center;
+            color: #333;
+            font-size: 24px;
+            line-height: 26px;
+          }
+          .label {
+            margin-bottom: 10px;
+          }
+          .remarks {
+            color: #ccc;
+          }
+        }
+        .money {
+          flex: 1;
+          text-align: right;
+          color: $color-brand;
+          font-size: 28px;
+          margin-bottom: 10px;
+          &.export {
+            color: #ff0000;
+          }
+        }
+      }
+      .no-record-wrapper {
+        position: absolute;
+        left: 50%;
+        top: 40%;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        transform: translate(-50%, -50%);
+        .icon {
+          font-weight: bold;
+          color: $color-brand;
+          margin-bottom: 10px;
+        }
+        .add-record {
+          margin-bottom: 10px;
+        }
+        .msg {
+          text-align: center;
+          font-size: 28px;
+          color: $color-brand;
+        }
+      }
     }
   }
 }

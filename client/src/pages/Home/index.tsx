@@ -1,7 +1,7 @@
 import Taro, { useDidHide, useDidShow } from '@tarojs/taro';
-import { AtIcon, AtMessage } from 'taro-ui';
+import { AtButton, AtIcon, AtMessage } from 'taro-ui';
 import { View, Text, Picker } from '@tarojs/components';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styles from './index.module.scss';
 import { useDispatch } from 'redux-react-hook';
 import { updateTabBarSelect } from '../../store/actions';
@@ -13,6 +13,8 @@ import { setClassName, transferAmount } from '../../utils';
 import Scroll from '../../components/Scroll';
 import { IHomeRequestData, IHomeResponseData, IRecordItem } from './interface';
 import { request } from '../../utils/wxUtils';
+import { categoryListPath } from '../../router';
+import { ECategoryTypeEnum } from '../CategoryList/enums';
 
 const Home = () => {
   const date = moment(new Date()).format('YYYY-MM');
@@ -28,14 +30,14 @@ const Home = () => {
   const [amountUsed, setAmountUsed] = useState<number>(0);
   const [unusedAmount, setUnusedAmount] = useState<number>(0);
 
-  const [canRequest, setCanRequest] = useState<boolean>(true);
   const [page, setPage] = useState<number>(1);
   const [totalPage, setTotalPage] = useState<number>(1);
   const [list, setList] = useState<Array<IRecordItem>>([]);
+  const canRequest = useRef<boolean>(true);
 
   const getData = async (params?: IHomeRequestData) => {
-    if (!canRequest) return;
-    setCanRequest(false);
+    if (!canRequest.current) return;
+    canRequest.current = false;
     const {
       list: responseList,
       totalPage,
@@ -45,6 +47,7 @@ const Home = () => {
     } = await request<IHomeResponseData>(
       'getHomeData',
       params ? params : { page, currentDate },
+      page === 1,
     );
 
     setList(page === 1 ? responseList : list.concat(responseList));
@@ -57,7 +60,7 @@ const Home = () => {
     const aboutToExceed = amountUsed + monthMaxMoney * 0.2 >= monthMaxMoney; // 即将超出上限 已使用金额+最大金额的两成>=最大金额
 
     // tips
-    if (hasExceeded || aboutToExceed) {
+    if ((hasExceeded || aboutToExceed) && monthMaxMoney) {
       Taro.atMessage({
         message: `本月的支出${
           hasExceeded ? '已经' : aboutToExceed ? '即将' : ''
@@ -65,7 +68,7 @@ const Home = () => {
         type: 'warning',
       });
     }
-    setCanRequest(true);
+    canRequest.current = true;
   };
 
   // 设置年份数组和月份数组
@@ -188,11 +191,70 @@ const Home = () => {
         <Scroll
           page={page}
           totalPage={totalPage}
+          isGetData={canRequest.current}
           updatePage={page => {
             setPage(page);
           }}
         >
-          123123
+          <View className={styles['record-wrapper']}>
+            {(!!list.length &&
+              list.map(
+                ({
+                  id,
+                  categoryName,
+                  money,
+                  recordDate,
+                  remarks,
+                  categoryType,
+                }) => (
+                  <View className={styles['record-item']} key={id}>
+                    <Text className={styles['record-date']}>
+                      {moment(recordDate).format('YYYY-MM-DD')}
+                    </Text>
+                    <View className={styles['category']}>
+                      <Text className={styles['label']}>{categoryName}</Text>
+                      <Text className={styles['remarks']}>{remarks}</Text>
+                    </View>
+                    <Text
+                      className={setClassName([
+                        styles['money'],
+                        categoryType === ECategoryTypeEnum.EXPORT
+                          ? styles['export']
+                          : '',
+                      ])}
+                    >
+                      {categoryType === ECategoryTypeEnum.EXPORT ? '-' : '+'}
+                      {transferAmount(money, 'yuan')}元
+                    </Text>
+                  </View>
+                ),
+              )) || (
+              <View className={styles['no-record-wrapper']}>
+                <AtIcon
+                  prefixClass="icon"
+                  value="meiyoushuju"
+                  className={styles['icon']}
+                  size="34"
+                />
+                <AtButton
+                  type="primary"
+                  className={styles['add-record']}
+                  circle
+                  size="small"
+                  onClick={() => {
+                    Taro.navigateTo({
+                      url: categoryListPath(),
+                    });
+                  }}
+                >
+                  添加记录
+                </AtButton>
+                <Text className={styles['msg']}>
+                  暂无账单记录,赶紧来记录一笔吧~
+                </Text>
+              </View>
+            )}
+          </View>
         </Scroll>
       </View>
       <AtMessage />

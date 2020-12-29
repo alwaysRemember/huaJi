@@ -2,7 +2,7 @@
  * @Author: Always
  * @LastEditors: Always
  * @Date: 2020-12-29 14:02:00
- * @LastEditTime: 2020-12-29 15:51:57
+ * @LastEditTime: 2020-12-29 18:34:38
  * @FilePath: /huaJi/server/getHomeData/index.js
  */
 const cloud = require('wx-server-sdk');
@@ -38,9 +38,9 @@ exports.main = async ({ page, currentDate }) => {
     }
     const { _id: userId, monthMaxMoney } = resultUser;
     //获取当前查询时间的第一天和最后一天
-    currentDate = new Date(currentDate);
-    const nowMonth = currentDate.getMonth();
-    const nowYear = currentDate.getFullYear();
+    const date = new Date(currentDate);
+    const nowMonth = date.getMonth();
+    const nowYear = date.getFullYear();
     const minDate = new Date(nowYear, nowMonth, 1);
     const maxDate = new Date(
       new Date(
@@ -52,41 +52,54 @@ exports.main = async ({ page, currentDate }) => {
 
     // 获取记录数据
     const _ = db.command;
-    const LIMIT = 10;
+    const LIMIT = 15;
     const sql = db
       .collection('tb_billing_record')
       .where({
         recordDate: _.gte(minDate).and(_.lte(maxDate)),
         userId,
       })
-      .orderBy('createTime', 'desc');
+      .orderBy('recordDate', 'desc');
     const { total } = await sql.count();
     const totalPage = Math.ceil(total / LIMIT);
-    const { data: list } = await sql
+    let { data: list } = await sql
       .skip((page - 1) * LIMIT)
       .limit(LIMIT)
       .get();
 
     // 获取当月已使用的金额
-    const d = new Date();
-    const nowTime = `${d.getFullYear()}-${d.getMonth() + 1}`; // YYYY-MM
     let { data: amountUsedResult } = await db
       .collection('tb_user_amount_used')
       .where({
         openid,
-        date: nowTime,
+        date: currentDate,
       })
       .get();
     const amountUsed = amountUsedResult.length
       ? amountUsedResult[0].amountUsed
       : 0;
 
+    // 获取数据中的分类名
+    const { data: categoryList } = await db
+      .collection('tb_category')
+      .where({
+        _id: _.in(list.map(({ categoryId }) => categoryId)),
+      })
+      .get();
+
     return {
-      totalPage,
-      list,
-      monthMaxMoney,
-      amountUsed,
-      unusedAmount: monthMaxMoney ? monthMaxMoney - amountUsed : 0,
+      code: 0,
+      data: {
+        totalPage,
+        list: list.map(item => {
+          const category = categoryList.find(c => c._id === item.categoryId);
+          return { ...item, id: item._id, categoryName: category.name || '' };
+        }),
+        monthMaxMoney,
+        amountUsed,
+        unusedAmount: monthMaxMoney ? monthMaxMoney - amountUsed : 0,
+      },
+      message: '成功',
     };
   } catch (e) {
     return {

@@ -1,2 +1,5 @@
 @import './common/css/custom-theme.scss';
 @import '~taro-ui/dist/style/index.scss';
+page {
+  height: calc(100% - 100px);
+}

@@ -89,12 +89,14 @@ const CategoryList = () => {
             >
               <View className={styles['icon-wrapper']}>
                 <View className={styles['icon']}>
-                  <ImagePreload
-                    src={item.icon}
-                    width={64}
-                    height={64}
-                    hasBg={false}
-                  />
+                  {!!item.icon && (
+                    <ImagePreload
+                      src={item.icon}
+                      width={64}
+                      height={64}
+                      hasBg={false}
+                    />
+                  )}
                 </View>
               </View>
               <Text

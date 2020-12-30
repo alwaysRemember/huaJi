@@ -24,15 +24,30 @@ const Scroll = ({
   }));
 
   const [loadMoreStatus, setLoadMoreStatus] = useState<TLoadMoreStatus>('more');
+  const [scrollTop, setScrollTop] = useState<number>(0);
+  const scrollTimed = useRef<NodeJS.Timeout>(); // scroll方法监听
+
+  useEffect(() => {
+    if (page === 1) {
+      setScrollTop(0);
+    }
+  }, [page]);
 
   return (
     <ScrollView
       upperThreshold={150}
       scrollY
+      scrollTop={scrollTop}
       scrollWithAnimation
       className={styles['scroll-wrapper']}
       show-showScrollbar={false}
       enable-back-to-top
+      onScroll={({ detail: { scrollTop: top } }) => {
+        scrollTimed.current && clearTimeout(scrollTimed.current);
+        scrollTimed.current = setTimeout(() => {
+          setScrollTop(top);
+        }, 500);
+      }}
       onScrollToLower={() => {
         if (loadMoreStatus === 'loading') return;
         const p = page + 1;

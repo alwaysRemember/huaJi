@@ -25,6 +25,7 @@ const ImagePreload = ({
             style={{
               width: pxTransform(width),
               height: pxTransform(height),
+              borderRadius: pxTransform(borderRadius),
             }}
           >
             {(isError && (

@@ -2,7 +2,7 @@
  * @Author: Always
  * @LastEditors: Always
  * @Date: 2020-12-16 17:54:16
- * @LastEditTime: 2020-12-29 17:30:24
+ * @LastEditTime: 2020-12-30 11:40:10
  * @FilePath: /huaJi/client/src/pages/Home/interface.ts
  */
 

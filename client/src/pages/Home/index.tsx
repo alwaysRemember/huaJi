@@ -1,5 +1,5 @@
 import Taro, { useDidHide, useDidShow } from '@tarojs/taro';
-import { AtButton, AtIcon, AtMessage } from 'taro-ui';
+import { AtButton, AtIcon, AtLoadMore, AtMessage } from 'taro-ui';
 import { View, Text, Picker } from '@tarojs/components';
 import React, { useEffect, useRef, useState } from 'react';
 import styles from './index.module.scss';
@@ -15,6 +15,7 @@ import { IHomeRequestData, IHomeResponseData, IRecordItem } from './interface';
 import { request } from '../../utils/wxUtils';
 import { categoryListPath } from '../../router';
 import { ECategoryTypeEnum } from '../CategoryList/enums';
+import { IScrollRef } from '../../components/Scroll/interface';
 
 const Home = () => {
   const date = moment(new Date()).format('YYYY-MM');
@@ -34,10 +35,12 @@ const Home = () => {
   const [totalPage, setTotalPage] = useState<number>(1);
   const [list, setList] = useState<Array<IRecordItem>>([]);
   const canRequest = useRef<boolean>(true);
+  const scrollRef = useRef<IScrollRef>(null);
 
   const getData = async (params?: IHomeRequestData) => {
     if (!canRequest.current) return;
     canRequest.current = false;
+    scrollRef.current?.changeLoadMoreStatus('loading');
     const {
       list: responseList,
       totalPage,
@@ -69,6 +72,9 @@ const Home = () => {
       });
     }
     canRequest.current = true;
+    scrollRef.current?.changeLoadMoreStatus(
+      page === totalPage ? 'noMore' : 'more',
+    );
   };
 
   // 设置年份数组和月份数组
@@ -189,16 +195,16 @@ const Home = () => {
       {/* 账单记录 */}
       <View className={styles['billing-record-wrapper']}>
         <Scroll
+          cref={scrollRef}
           page={page}
           totalPage={totalPage}
-          isGetData={canRequest.current}
           updatePage={page => {
             setPage(page);
           }}
         >
-          <View className={styles['record-wrapper']}>
-            {(!!list.length &&
-              list.map(
+          {(!!list.length && (
+            <View className={styles['record-wrapper']}>
+              {list.map(
                 ({
                   id,
                   categoryName,
@@ -228,33 +234,34 @@ const Home = () => {
                     </Text>
                   </View>
                 ),
-              )) || (
-              <View className={styles['no-record-wrapper']}>
-                <AtIcon
-                  prefixClass="icon"
-                  value="meiyoushuju"
-                  className={styles['icon']}
-                  size="34"
-                />
-                <AtButton
-                  type="primary"
-                  className={styles['add-record']}
-                  circle
-                  size="small"
-                  onClick={() => {
-                    Taro.navigateTo({
-                      url: categoryListPath(),
-                    });
-                  }}
-                >
-                  添加记录
-                </AtButton>
-                <Text className={styles['msg']}>
-                  暂无账单记录,赶紧来记录一笔吧~
-                </Text>
-              </View>
-            )}
-          </View>
+              )}
+            </View>
+          )) || (
+            <View className={styles['no-record-wrapper']}>
+              <AtIcon
+                prefixClass="icon"
+                value="meiyoushuju"
+                className={styles['icon']}
+                size="34"
+              />
+              <AtButton
+                type="primary"
+                className={styles['add-record']}
+                circle
+                size="small"
+                onClick={() => {
+                  Taro.navigateTo({
+                    url: categoryListPath(),
+                  });
+                }}
+              >
+                添加记录
+              </AtButton>
+              <Text className={styles['msg']}>
+                暂无账单记录,赶紧来记录一笔吧~
+              </Text>
+            </View>
+          )}
         </Scroll>
       </View>
       <AtMessage />

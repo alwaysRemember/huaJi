@@ -74,11 +74,10 @@
     }
   }
   .billing-record-wrapper {
+    position: relative;
     overflow: hidden;
     flex: 1;
     .record-wrapper {
-      position: relative;
-      min-height: 100%;
       .record-item {
         padding: 20px 0;
         box-sizing: border-box;
@@ -129,28 +128,28 @@
           }
         }
       }
-      .no-record-wrapper {
-        position: absolute;
-        left: 50%;
-        top: 40%;
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        transform: translate(-50%, -50%);
-        .icon {
-          font-weight: bold;
-          color: $color-brand;
-          margin-bottom: 10px;
-        }
-        .add-record {
-          margin-bottom: 10px;
-        }
-        .msg {
-          text-align: center;
-          font-size: 28px;
-          color: $color-brand;
-        }
+    }
+    .no-record-wrapper {
+      position: absolute;
+      left: 50%;
+      top: 40%;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transform: translate(-50%, -50%);
+      .icon {
+        font-weight: bold;
+        color: $color-brand;
+        margin-bottom: 10px;
+      }
+      .add-record {
+        margin-bottom: 10px;
+      }
+      .msg {
+        text-align: center;
+        font-size: 28px;
+        color: $color-brand;
       }
     }
   }

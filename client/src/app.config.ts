@@ -2,13 +2,13 @@
  * @Author: Always
  * @LastEditors: Always
  * @Date: 2020-12-15 17:21:22
- * @LastEditTime: 2020-12-30 16:46:17
+ * @LastEditTime: 2021-01-04 15:08:31
  * @FilePath: /huaJi/client/src/app.config.ts
  */
 export default {
   pages: [
-    'pages/Home/index',
     'pages/Summary/index',
+    'pages/Home/index',
     'pages/CategoryList/index',
     'pages/Login/index',
     'pages/PersonalCenter/index',

@@ -1,0 +1,101 @@
+@import '../../common/css/custom-theme.scss';
+.summary-wrapper {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  .top-wrapper {
+    height: 300px;
+    .top-con {
+      position: fixed;
+      left: 0;
+      top: 0;
+      box-sizing: border-box;
+      padding: 30px;
+      width: 100%;
+      height: 300px;
+      background-color: $color-brand;
+      .select-year-wrapper {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        align-items: center;
+        margin-bottom: 20px;
+        .select-year {
+          font-size: 26px;
+          color: #fff;
+        }
+      }
+      .overview-wrapper {
+        .item {
+          display: flex;
+          flex-direction: row;
+        }
+        .con {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          color: #fff;
+          .label {
+            font-size: 26px;
+            margin-bottom: 10px;
+          }
+          .value {
+            font-size: 30px;
+          }
+        }
+      }
+    }
+  }
+  .list-wrapper {
+    position: relative;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    .summary-header {
+      height: 100px;
+      .summary-item {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background: #fff;
+        z-index: 999;
+        .item {
+          .text {
+            font-weight: bold;
+          }
+        }
+      }
+    }
+    .summary-item {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      border-bottom: 1px solid #efefef;
+      &:nth-child(even) {
+        background: #f7f6f6;
+      }
+      .item {
+        flex: 2;
+        &.label {
+          flex: 1;
+        }
+        .text {
+          display: block;
+          height: 100px;
+          font-size: 28px;
+          text-align: center;
+          line-height: 100px;
+          color: #333;
+        }
+      }
+    }
+    .list-con {
+      overflow: hidden;
+      flex: 1;
+    }
+  }
+}

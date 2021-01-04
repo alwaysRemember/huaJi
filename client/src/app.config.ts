@@ -2,12 +2,13 @@
  * @Author: Always
  * @LastEditors: Always
  * @Date: 2020-12-15 17:21:22
- * @LastEditTime: 2020-12-29 16:41:46
+ * @LastEditTime: 2020-12-30 16:46:17
  * @FilePath: /huaJi/client/src/app.config.ts
  */
 export default {
   pages: [
     'pages/Home/index',
+    'pages/Summary/index',
     'pages/CategoryList/index',
     'pages/Login/index',
     'pages/PersonalCenter/index',
@@ -20,7 +21,7 @@ export default {
   },
   tabBar: {
     selectedColor: '#6ac5d7',
-    color: '#707070',
+    color: '#8a8a8a',
     custom: true,
     usingComponents: {},
     list: [
@@ -35,6 +36,10 @@ export default {
         text: '我的',
         // iconPath: './images/tabbar/shopping_cart.png', // 35*38
         // selectedIconPath: './images/tabbar/shopping_cart_selected.png',
+      },
+      {
+        pagePath: 'pages/Summary/index',
+        text: '汇总',
       },
     ],
   },

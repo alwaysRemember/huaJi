@@ -81,7 +81,9 @@ const Home = () => {
   useEffect(() => {
     const [year, month] = date.split('-');
     const yearList = [...Array(20).keys()].map(k => String(Number(year) - k));
-    const monthList = [...Array(12).keys()].map(k => String(k + 1));
+    const monthList = [...Array(12).keys()].map(k =>
+      String(k < 10 ? `0${k + 1}` : k + 1),
+    );
     yearList.reverse();
 
     setSelectYearList(yearList);
@@ -105,6 +107,8 @@ const Home = () => {
     getData();
   }, [page]);
   useEffect(() => {
+    console.log(currentDate);
+
     if (page === 1) {
       getData({ page, currentDate });
     } else {

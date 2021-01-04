@@ -9,9 +9,10 @@ import { updateTabBarSelect } from '../../store/actions';
 import styles from './index.module.scss';
 import { useCheckLogin } from '../../hooks';
 import { setClassName, transferAmount } from '../../utils';
-import { IMonthData } from './interface';
+import { IMonthData, ISummaryResponseData } from './interface';
 import Scroll from '../../components/Scroll';
 import { IScrollRef } from '../../components/Scroll/interface';
+import { request } from '../../utils/wxUtils';
 
 const Summary = () => {
   const date = moment(new Date()).format('YYYY');
@@ -24,17 +25,21 @@ const Summary = () => {
   const [balance, setBalance] = useState<number>(0);
   const [expenditure, setExpenditure] = useState<number>(0);
   const [income, setIncome] = useState<number>(0);
-  const [list, setList] = useState<Array<IMonthData>>(
-    [...Array(12).keys()].map(k => ({
-      id: k + '',
-      label: k + 1 + '',
-      income: k * 10000,
-      expenditure: k * 10000,
-      balance: k * 10000,
-    })),
-  );
+  const [list, setList] = useState<Array<IMonthData>>([]);
 
   const scrollRef = useRef<IScrollRef>(null);
+
+  const getData = async () => {
+    const { list, expenditure, balance, income } = await request<
+      ISummaryResponseData
+    >('getSummaryData', {
+      year: currentDate,
+    });
+    setList(list);
+    setExpenditure(expenditure);
+    setBalance(balance);
+    setIncome(income);
+  };
 
   // 设置年份数组和月份数组
   useEffect(() => {
@@ -56,8 +61,13 @@ const Summary = () => {
   }, [currentDateIndex]);
 
   useEffect(() => {
-    console.log(currentDate);
+    getData();
   }, [currentDate]);
+
+  useDidShow(() => {
+    getData();
+  });
+
   useDidShow(() => {
     dispatch(updateTabBarSelect(ETabBarEnum.SUMMARY));
   });
@@ -145,7 +155,12 @@ const Summary = () => {
                   </Text>
                 </View>
                 <View className={styles['item']}>
-                  <Text className={styles['text']}>
+                  <Text
+                    className={setClassName([
+                      styles['text'],
+                      balance < 0 ? styles['negative'] : '',
+                    ])}
+                  >
                     {transferAmount(balance, 'yuan')} 元
                   </Text>
                 </View>

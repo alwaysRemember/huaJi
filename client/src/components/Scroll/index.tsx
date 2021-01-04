@@ -57,13 +57,15 @@ const Scroll = ({
     >
       {children}
       {/* 加载中以及加载完毕 */}
-      <AtLoadMore
-        status={loadMoreStatus}
-        moreText="等待加载"
-        moreBtnStyle={{
-          color: '#6ac5d7',
-        }}
-      />
+      {page <= totalPage && (
+        <AtLoadMore
+          status={loadMoreStatus}
+          moreText="等待加载"
+          moreBtnStyle={{
+            color: '#6ac5d7',
+          }}
+        />
+      )}
     </ScrollView>
   );
 };

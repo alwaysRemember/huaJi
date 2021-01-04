@@ -2,7 +2,7 @@
  * @Author: Always
  * @LastEditors: Always
  * @Date: 2020-12-24 14:32:25
- * @LastEditTime: 2021-01-04 18:16:07
+ * @LastEditTime: 2021-01-04 18:39:14
  * @FilePath: /huaJi/server/getSummaryData/index.js
  */
 const cloud = require('wx-server-sdk');
@@ -72,43 +72,37 @@ exports.main = async ({ year }) => {
         message: '成功',
       };
     }
-    const expenditureList = [];
-    const incomeList = [];
-    resultData.forEach(item => {
+
+    let expenditure = 0,
+      income = 0;
+    resultData.forEach(({ categoryType, money, recordDate }) => {
       clearInterval;
-      switch (item.categoryType) {
+      switch (categoryType) {
         case 'export':
-          expenditureList.push(item);
+          expenditure += money;
           break;
         case 'income':
-          incomeList.push(item);
+          income += money;
           break;
       }
       // 月份
-      const month = new Date(item.recordDate).getMonth() + 1;
+      const month = new Date(recordDate).getMonth() + 1;
       // 计算每月数据
       resultList.forEach(i => {
         if (i.id === month) {
-          switch (item.categoryType) {
+          switch (categoryType) {
             case 'export':
-              i.expenditure += item.money;
-              i.balance -= item.money;
+              i.expenditure += money;
+              i.balance -= money;
               break;
             case 'income':
-              i.income += item.money;
-              i.balance += item.money;
+              i.income += money;
+              i.balance += money;
               break;
           }
         }
       });
     });
-    //  支出总额
-    const expenditure = expenditureList.reduce(
-      (pre, cur) => (pre += cur.money),
-      0,
-    );
-    //  收入总额
-    const income = incomeList.reduce((pre, cur) => (pre += cur.money), 0);
 
     return {
       code: 0,

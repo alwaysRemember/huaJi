@@ -254,8 +254,10 @@ const Home = () => {
                 circle
                 size="small"
                 onClick={() => {
-                  Taro.navigateTo({
-                    url: categoryListPath(),
+                  checkLogin().then(() => {
+                    Taro.navigateTo({
+                      url: categoryListPath(),
+                    });
                   });
                 }}
               >

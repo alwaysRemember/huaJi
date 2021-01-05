@@ -3,6 +3,7 @@ import Taro from '@tarojs/taro';
 import React, { useEffect, useState } from 'react';
 import {
   categoryListPath,
+  echartPath,
   homePath,
   personalCenterPath,
   summaryPath,
@@ -48,6 +49,17 @@ const tabBar = () => {
         'https://6875-huaji-server-prod-2egmhbb1fd0438-1304528052.tcb.qcloud.la/add.png?sign=15555aec87af0092803116668e88544c&t=1608802824',
       isSelect: true,
       isTabBarPage: false,
+    },
+    {
+      id: ETabBarEnum.ECHART,
+      path: echartPath(),
+      title: '图表',
+      icon:
+        'https://6875-huaji-server-prod-2egmhbb1fd0438-1304528052.tcb.qcloud.la/echart.png?sign=0312a0537d4eef9ddd88410ff5969b3b&t=1609826892',
+      selectIcon:
+        'https://6875-huaji-server-prod-2egmhbb1fd0438-1304528052.tcb.qcloud.la/echart_select.png?sign=219054695e79d52f4f36368b0d54a1d4&t=1609826901',
+      isSelect: false,
+      isTabBarPage: true,
     },
     {
       id: ETabBarEnum.PERSONAL_CENTER,

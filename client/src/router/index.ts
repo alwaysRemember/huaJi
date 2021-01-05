@@ -2,7 +2,7 @@
  * @Author: Always
  * @LastEditors: Always
  * @Date: 2020-12-16 18:17:52
- * @LastEditTime: 2020-12-30 16:33:25
+ * @LastEditTime: 2021-01-05 14:08:57
  * @FilePath: /huaJi/client/src/router/index.ts
  */
 
@@ -23,3 +23,6 @@ export const categoryListPath: TPath<null> = () => `/pages/CategoryList/index`;
 
 // 汇总页面
 export const summaryPath: TPath<null> = () => `/pages/Summary/index`;
+
+// 图表页面
+export const echartPath: TPath<null> = () => `/pages/Echart/index`;

@@ -2,11 +2,12 @@
  * @Author: Always
  * @LastEditors: Always
  * @Date: 2020-12-15 17:21:22
- * @LastEditTime: 2021-01-04 15:08:31
+ * @LastEditTime: 2021-01-05 15:58:48
  * @FilePath: /huaJi/client/src/app.config.ts
  */
 export default {
   pages: [
+    'pages/Echart/index',
     'pages/Summary/index',
     'pages/Home/index',
     'pages/CategoryList/index',
@@ -40,6 +41,10 @@ export default {
       {
         pagePath: 'pages/Summary/index',
         text: '汇总',
+      },
+      {
+        pagePath: 'pages/Echart/index',
+        text: '图表',
       },
     ],
   },

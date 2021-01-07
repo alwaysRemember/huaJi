@@ -2,7 +2,7 @@
  * @Author: Always
  * @LastEditors: Always
  * @Date: 2020-06-24 21:31:22
- * @LastEditTime: 2020-12-29 18:21:30
+ * @LastEditTime: 2021-01-07 15:18:02
  * @FilePath: /huaJi/client/src/utils/wxUtils.ts
  */
 import Taro from '@tarojs/taro';
@@ -40,9 +40,9 @@ export const showToast = ({
  * @param requestName
  * @param params
  */
-export const request = async <T = null>(
+export const request = async <T = null, P = {}>(
   requestName: string,
-  params?: any,
+  params?: P,
   showLoading: boolean = true,
 ): Promise<T> => {
   wx.cloud.init({

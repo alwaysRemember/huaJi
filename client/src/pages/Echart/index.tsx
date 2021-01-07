@@ -10,6 +10,9 @@ import styles from './index.module.scss';
 import moment from 'moment';
 import { AtIcon, AtTabs } from 'taro-ui';
 import { useCheckLogin } from '../../hooks';
+import { request } from '../../utils/wxUtils';
+import { IEchartRequestParams, IEchartResponseData } from './interface';
+import { transferAmount } from '../../utils';
 
 const Echart = () => {
   const [nowYear, nowMonth]: Array<string> = moment()
@@ -25,6 +28,7 @@ const Echart = () => {
 
   const [monthList, setMonthList] = useState<Array<string>>([]);
   const [yearList, setYearList] = useState<Array<string>>([]);
+  const [canGetData, setCanGetData] = useState<boolean>(true);
 
   const lineChart = useRef<any>(null);
 
@@ -44,14 +48,33 @@ const Echart = () => {
     setSelectMonthIndex(index);
   };
 
-  const getData = () => {
-    setTimeout(() => {
-      updateLineChart();
-    });
+  const getData = async () => {
+    if (!lineChart.current) return;
+    if (!canGetData) return;
+    setCanGetData(false);
+    try {
+      const { expenditureList, incomeList } = await request<
+        IEchartResponseData,
+        IEchartRequestParams
+      >('getEchartData', { year: selectYear, month: selectMonth });
+      const fn = (i: number): string => transferAmount(i, 'yuan') as string;
+      updateLineChart(
+        expenditureList.map(i => fn(i)),
+        incomeList.map(i => fn(i)),
+      );
+    } catch (e) {}
+    setCanGetData(true);
   };
 
-  // 折线图数据更新
-  const updateLineChart = () => {
+  /**
+   * 折线图数据更新
+   * @param expenditureList 支出数据
+   * @param incomeList  收入数据
+   */
+  const updateLineChart = (
+    expenditureList: Array<string>,
+    incomeList: Array<string>,
+  ) => {
     const yearXAxisData = [
       '1月',
       '2月',
@@ -69,9 +92,15 @@ const Echart = () => {
     const option = {
       tooltip: {
         trigger: 'axis',
+        axisPointer: {
+          type: 'cross',
+          label: {
+            backgroundColor: '#6ac5d7',
+          },
+        },
       },
       legend: {
-        data: ['邮件营销', '联盟广告'],
+        data: ['支出', '收入'],
       },
       grid: {
         left: '3%',
@@ -100,6 +129,10 @@ const Echart = () => {
       },
       yAxis: {
         type: 'value',
+        name: '金额（元）',
+        axisLabel: {
+          formatter: '{value} 元',
+        },
       },
       series: [
         {
@@ -107,19 +140,17 @@ const Echart = () => {
           name: '支出',
           type: 'line',
           stack: '总量',
-          data: [120, 132, 101, 134, 90, 230, 210],
+          data: expenditureList,
         },
         {
           color: '#6ac5d7',
           name: '收入',
           type: 'line',
           stack: '总量',
-          data: [220, 182, 191, 234, 290, 330, 310],
+          data: incomeList,
         },
       ],
     };
-    console.log(lineChart.current);
-
     if (lineChart.current) {
       lineChart.current.setOption(option);
     }

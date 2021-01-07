@@ -29,8 +29,7 @@ const Echart = () => {
   const [monthList, setMonthList] = useState<Array<string>>([]);
   const [yearList, setYearList] = useState<Array<string>>([]);
   const [canGetData, setCanGetData] = useState<boolean>(true);
-
-  const lineChart = useRef<any>(null);
+  const [lineChart, setLineChart] = useState<any>(null);
 
   // 折线图初始化
   const lineChartInit = (canvas, width, height, dpr) => {
@@ -40,7 +39,8 @@ const Echart = () => {
       devicePixelRatio: dpr,
     });
     canvas.setChart(chart);
-    lineChart.current = chart;
+
+    setLineChart(chart);
     return chart;
   };
 
@@ -49,7 +49,7 @@ const Echart = () => {
   };
 
   const getData = async () => {
-    if (!lineChart.current) return;
+    if (!lineChart) return;
     if (!canGetData) return;
     setCanGetData(false);
     try {
@@ -140,6 +140,7 @@ const Echart = () => {
           name: '支出',
           type: 'line',
           stack: '总量',
+          areaStyle: {},
           data: expenditureList,
         },
         {
@@ -147,12 +148,13 @@ const Echart = () => {
           name: '收入',
           type: 'line',
           stack: '总量',
+          areaStyle: {},
           data: incomeList,
         },
       ],
     };
-    if (lineChart.current) {
-      lineChart.current.setOption(option);
+    if (lineChart) {
+      lineChart.setOption(option);
     }
   };
 
@@ -204,11 +206,12 @@ const Echart = () => {
     yearList.reverse();
     setYearList(yearList);
     dispatch(updateTabBarSelect(ETabBarEnum.ECHART));
+    getData();
   });
 
   useEffect(() => {
     getData();
-  }, [selectYear, selectMonth, lineChart.current]);
+  }, [selectYear, selectMonth, lineChart]);
 
   return (
     <View className={styles['echart-wrapper']}>

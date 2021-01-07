@@ -107,8 +107,6 @@ const Home = () => {
     getData();
   }, [page]);
   useEffect(() => {
-    console.log(currentDate);
-
     if (page === 1) {
       getData({ page, currentDate });
     } else {

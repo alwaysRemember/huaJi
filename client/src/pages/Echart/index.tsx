@@ -1,4 +1,4 @@
-import { View, Text, Picker } from '@tarojs/components';
+import { View, Text, Picker, CoverView, ScrollView } from '@tarojs/components';
 import Taro, { useDidShow } from '@tarojs/taro';
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'redux-react-hook';
@@ -8,11 +8,16 @@ import { updateTabBarSelect } from '../../store/actions';
 import * as echarts from '../../components/ec-canvas/echarts';
 import styles from './index.module.scss';
 import moment from 'moment';
-import { AtIcon, AtTabs } from 'taro-ui';
+import { AtIcon, AtTabs, AtSegmentedControl } from 'taro-ui';
 import { useCheckLogin } from '../../hooks';
 import { request } from '../../utils/wxUtils';
-import { IEchartRequestParams, IEchartResponseData } from './interface';
-import { transferAmount } from '../../utils';
+import {
+  EPieChartType,
+  ICategoryDataItem,
+  IEchartRequestParams,
+  IEchartResponseData,
+} from './interface';
+import { setClassName, transferAmount } from '../../utils';
 
 const Echart = () => {
   const [nowYear, nowMonth]: Array<string> = moment()
@@ -30,6 +35,18 @@ const Echart = () => {
   const [yearList, setYearList] = useState<Array<string>>([]);
   const [canGetData, setCanGetData] = useState<boolean>(true);
   const [lineChart, setLineChart] = useState<any>(null);
+  const [pieChart, setPieChart] = useState<any>(null);
+  const [pieChartType, setPieChartType] = useState<EPieChartType>(
+    EPieChartType.EXPENDITURE,
+  ); //显示的饼图类型
+
+  const [
+    expenditureCategoryDataList,
+    setExpenditureCategoryDataList,
+  ] = useState<Array<ICategoryDataItem>>([]);
+  const [incomeCategoryDataList, setIncomeCategoryDataList] = useState<
+    Array<ICategoryDataItem>
+  >([]);
 
   // 折线图初始化
   const lineChartInit = (canvas, width, height, dpr) => {
@@ -44,26 +61,108 @@ const Echart = () => {
     return chart;
   };
 
+  //  饼图初始化
+  const pieChartInit = (canvas, width, height, dpr) => {
+    const chart = echarts.init(canvas, null, {
+      width,
+      height,
+      devicePixelRatio: dpr,
+    });
+    canvas.setChart(chart);
+
+    setPieChart(chart);
+    return chart;
+  };
+
   const tabsClick = (index: number) => {
     setSelectMonthIndex(index);
   };
 
   const getData = async () => {
-    if (!lineChart) return;
+    if (!lineChart || !pieChart) return;
     if (!canGetData) return;
     setCanGetData(false);
     try {
-      const { expenditureList, incomeList } = await request<
-        IEchartResponseData,
-        IEchartRequestParams
-      >('getEchartData', { year: selectYear, month: selectMonth });
+      const {
+        expenditureList,
+        incomeList,
+        expenditureCategoryDataList,
+        incomeCategoryDataList,
+      } = await request<IEchartResponseData, IEchartRequestParams>(
+        'getEchartData',
+        { year: selectYear, month: selectMonth },
+      );
       const fn = (i: number): string => transferAmount(i, 'yuan') as string;
       updateLineChart(
         expenditureList.map(i => fn(i)),
         incomeList.map(i => fn(i)),
       );
+      updatePieChart(expenditureCategoryDataList);
+      setExpenditureCategoryDataList(expenditureCategoryDataList);
+      setIncomeCategoryDataList(incomeCategoryDataList);
     } catch (e) {}
     setCanGetData(true);
+  };
+
+  const updatePieChart = (data: Array<ICategoryDataItem>) => {
+    console.log('update');
+
+    data = [
+      {
+        name: '视频',
+        value: 1000,
+      },
+      {
+        name: '音乐',
+        value: 500,
+      },
+    ];
+    const option = {
+      title: {
+        text: '同名数量统计',
+        subtext: '纯属虚构',
+        left: 'center',
+      },
+      tooltip: {
+        trigger: 'item',
+        formatter: '{a} <br/>{b} : {c} ({d}%)',
+      },
+      legend: {
+        type: 'scroll',
+        orient: 'vertical',
+        right: 10,
+        top: 20,
+        bottom: 20,
+        data: data.map(({ name }) => name),
+        selected: data.reduce((pre, cur) => {
+          pre[cur.name] = true;
+          return pre;
+        }, {}),
+      },
+      series: [
+        {
+          name: '姓名',
+          type: 'pie',
+          radius: '55%',
+          center: ['40%', '50%'],
+          data: data.map(({ name, value }) => ({
+            name,
+            value: transferAmount(value, 'yuan'),
+          })),
+          emphasis: {
+            itemStyle: {
+              shadowBlur: 10,
+              shadowOffsetX: 0,
+              shadowColor: 'rgba(0, 0, 0, 0.5)',
+            },
+          },
+        },
+      ],
+    };
+    if (pieChart) {
+      console.log('setoption');
+      pieChart.setOption(option);
+    }
   };
 
   /**
@@ -158,6 +257,17 @@ const Echart = () => {
     }
   };
 
+  //  监听饼图切换
+  useEffect(() => {
+    if (!expenditureCategoryDataList.length || !incomeCategoryDataList.length)
+      return;
+    if (pieChartType === EPieChartType.EXPENDITURE) {
+      updatePieChart(expenditureCategoryDataList);
+    } else {
+      updatePieChart(incomeCategoryDataList);
+    }
+  }, [pieChartType]);
+
   // 监听年份选择，渲染月份列表
   useEffect(() => {
     const nowYear = new Date().getFullYear();
@@ -211,7 +321,7 @@ const Echart = () => {
 
   useEffect(() => {
     getData();
-  }, [selectYear, selectMonth, lineChart]);
+  }, [selectYear, selectMonth, lineChart, pieChart]);
 
   return (
     <View className={styles['echart-wrapper']}>
@@ -234,19 +344,56 @@ const Echart = () => {
           </Picker>
         </View>
       </View>
-      <AtTabs
-        swipeable={false}
-        scroll={monthList.length > 4}
-        current={selectMonthIndex}
-        tabList={monthList.map(i => ({
-          title: i !== 'ALL' ? `${i}月` : '全年',
-        }))}
-        onClick={tabsClick}
-      />
-      <View className={styles['line-chart']}>
-        {/* @ts-ignore */}
-        <ec-canvas canvas-id="line-chart" ec={{ onInit: lineChartInit }} />
-      </View>
+      <ScrollView scrollY className={styles['scroll-view']}>
+        <AtTabs
+          className={styles['tabs-wrapper']}
+          swipeable={false}
+          scroll={monthList.length > 4}
+          current={selectMonthIndex}
+          tabList={monthList.map(i => ({
+            title: i !== 'ALL' ? `${i}月` : '全年',
+          }))}
+          onClick={tabsClick}
+        />
+        <View className={styles['line-chart']}>
+          {/* @ts-ignore */}
+          <ec-canvas canvas-id="line-chart" ec={{ onInit: lineChartInit }} />
+        </View>
+        <View className={styles['pie-chart-wrapper']}>
+          <View className={styles['pie-chart-top']}>
+            <Text className={styles['title']}>分类占比</Text>
+            <View className={styles['pie-chart-type-wrapper']}>
+              {[
+                {
+                  value: '支出',
+                  type: EPieChartType.EXPENDITURE,
+                },
+                {
+                  value: '收入',
+                  type: EPieChartType.INCOME,
+                },
+              ].map(({ value, type }) => (
+                <Text
+                  className={setClassName([
+                    styles['item'],
+                    type === pieChartType ? styles['on'] : '',
+                  ])}
+                  key={type}
+                  onClick={() => {
+                    setPieChartType(type);
+                  }}
+                >
+                  {value}
+                </Text>
+              ))}
+            </View>
+          </View>
+          <View className={styles['pie-chart']}>
+            {/* @ts-ignore */}
+            <ec-canvas canvas-id="pie-chart" ec={{ onInit: pieChartInit }} />
+          </View>
+        </View>
+      </ScrollView>
     </View>
   );
 };

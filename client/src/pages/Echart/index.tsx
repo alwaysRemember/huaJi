@@ -316,8 +316,14 @@ const Echart = () => {
   });
 
   useEffect(() => {
-    getData();
-  }, [selectMonth, lineChart, pieChart]);
+    /* 为了处理年份选择后立即重置月份的情况造成两次请求的问题 */
+    const timer = setTimeout(() => {
+      getData();
+    }, 50);
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [selectYear, selectMonth, lineChart, pieChart]);
 
   return (
     <View className={styles['echart-wrapper']}>

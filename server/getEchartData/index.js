@@ -2,7 +2,7 @@
  * @Author: Always
  * @LastEditors: Always
  * @Date: 2020-12-29 14:02:00
- * @LastEditTime: 2021-01-08 15:24:02
+ * @LastEditTime: 2021-01-08 16:21:36
  * @FilePath: /huaJi/server/getEchartData/index.js
  */
 const cloud = require('wx-server-sdk');

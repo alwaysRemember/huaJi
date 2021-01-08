@@ -2,7 +2,7 @@
  * @Author: Always
  * @LastEditors: Always
  * @Date: 2020-12-29 14:02:00
- * @LastEditTime: 2021-01-08 14:41:05
+ * @LastEditTime: 2021-01-08 15:24:02
  * @FilePath: /huaJi/server/getEchartData/index.js
  */
 const cloud = require('wx-server-sdk');
@@ -86,16 +86,20 @@ exports.main = async ({ year, month }) => {
       incomeList = income;
     }
     // 分类信息
-    const { data: resultCategoryList } = await db
-      .collection('tb_category')
-      .where({
-        _id: _.in([
-          ...Array.from(
-            new Set(resultList.map(({ categoryId }) => categoryId)),
-          ),
-        ]),
-      })
-      .get();
+    let resultCategoryList = [];
+    if (resultList.length) {
+      const { data } = await db
+        .collection('tb_category')
+        .where({
+          _id: _.in([
+            ...Array.from(
+              new Set(resultList.map(({ categoryId }) => categoryId)),
+            ),
+          ]),
+        })
+        .get();
+      resultCategoryList = data;
+    }
 
     // 获取饼图信息
     const expenditureCategoryDataList = [],
@@ -139,9 +143,10 @@ exports.main = async ({ year, month }) => {
       message: '成功',
     };
   } catch (e) {
+    console.log(e);
     return {
       code: -1,
-      message: e,
+      message: e.message ? e.message : e,
       data: null,
     };
   }

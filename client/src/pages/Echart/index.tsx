@@ -8,7 +8,7 @@ import { updateTabBarSelect } from '../../store/actions';
 import * as echarts from '../../components/ec-canvas/echarts';
 import styles from './index.module.scss';
 import moment from 'moment';
-import { AtIcon, AtTabs, AtSegmentedControl } from 'taro-ui';
+import { AtIcon, AtTabs } from 'taro-ui';
 import { useCheckLogin } from '../../hooks';
 import { request } from '../../utils/wxUtils';
 import {
@@ -97,6 +97,7 @@ const Echart = () => {
         expenditureList.map(i => fn(i)),
         incomeList.map(i => fn(i)),
       );
+      setPieChartType(EPieChartType.EXPENDITURE);
       updatePieChart(expenditureCategoryDataList);
       setExpenditureCategoryDataList(expenditureCategoryDataList);
       setIncomeCategoryDataList(incomeCategoryDataList);
@@ -105,6 +106,15 @@ const Echart = () => {
   };
 
   const updatePieChart = (data: Array<ICategoryDataItem>) => {
+    data = data.length
+      ? data
+      : [
+          {
+            name: '无数据',
+            money: 0,
+          },
+        ];
+
     const option = {
       title: {
         text: `${
@@ -114,7 +124,7 @@ const Echart = () => {
       },
       tooltip: {
         trigger: 'item',
-        formatter: '{a} {b} : {c} ({d}%)',
+        formatter: '{a} {b} : {c}元 ({d}%)',
       },
       legend: {
         type: 'scroll',
@@ -130,7 +140,7 @@ const Echart = () => {
       },
       series: [
         {
-          name: '姓名',
+          name: '类别',
           type: 'pie',
           radius: '55%',
           center: ['40%', '50%'],
@@ -247,8 +257,6 @@ const Echart = () => {
 
   //  监听饼图切换
   useEffect(() => {
-    if (!expenditureCategoryDataList.length || !incomeCategoryDataList.length)
-      return;
     if (pieChartType === EPieChartType.EXPENDITURE) {
       updatePieChart(expenditureCategoryDataList);
     } else {
@@ -309,7 +317,7 @@ const Echart = () => {
 
   useEffect(() => {
     getData();
-  }, [selectYear, selectMonth, lineChart, pieChart]);
+  }, [selectMonth, lineChart, pieChart]);
 
   return (
     <View className={styles['echart-wrapper']}>

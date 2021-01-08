@@ -2,7 +2,7 @@
  * @Author: Always
  * @LastEditors: Always
  * @Date: 2020-12-29 14:02:00
- * @LastEditTime: 2021-01-07 15:15:50
+ * @LastEditTime: 2021-01-08 14:41:05
  * @FilePath: /huaJi/server/getEchartData/index.js
  */
 const cloud = require('wx-server-sdk');
@@ -73,6 +73,7 @@ exports.main = async ({ year, month }) => {
     });
     let expenditureList = [],
       incomeList = [];
+
     // 处理输出
     if (month === 'ALL') {
       list.forEach(({ expenditure, income }) => {
@@ -84,11 +85,56 @@ exports.main = async ({ year, month }) => {
       expenditureList = expenditure;
       incomeList = income;
     }
+    // 分类信息
+    const { data: resultCategoryList } = await db
+      .collection('tb_category')
+      .where({
+        _id: _.in([
+          ...Array.from(
+            new Set(resultList.map(({ categoryId }) => categoryId)),
+          ),
+        ]),
+      })
+      .get();
+
+    // 获取饼图信息
+    const expenditureCategoryDataList = [],
+      incomeCategoryDataList = [];
+    resultList.forEach(({ categoryId, categoryType, money }) => {
+      const { name } = resultCategoryList.find(({ _id }) => _id === categoryId);
+      // 判断是否当前分类已经存在与数组
+      const index = (categoryType === 'export'
+        ? expenditureCategoryDataList
+        : incomeCategoryDataList
+      ).findIndex(({ name: categoryName }) => name === categoryName);
+
+      if (categoryType === 'export') {
+        if (index === -1) {
+          expenditureCategoryDataList.push({
+            name,
+            money,
+          });
+        } else {
+          expenditureCategoryDataList[index].money += money;
+        }
+      } else {
+        if (index === -1) {
+          incomeCategoryDataList.push({
+            name,
+            money,
+          });
+        } else {
+          incomeCategoryDataList[index].money += money;
+        }
+      }
+    });
     return {
       code: 0,
       data: {
         expenditureList,
         incomeList,
+        incomeCategoryDataList,
+        expenditureCategoryDataList,
       },
       message: '成功',
     };

@@ -1,8 +1,5 @@
 @import '../common/css/custom-theme.scss';
 .tab-bar-wrapper {
-  height: calc(100px+ constant(safe-area-inset-bottom));
-  height: calc(100px + env(safe-area-inset-bottom));
-  overflow: visible;
   .tab-bar-con {
     overflow: visible;
     padding-bottom: constant(safe-area-inset-bottom);

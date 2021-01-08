@@ -105,27 +105,16 @@ const Echart = () => {
   };
 
   const updatePieChart = (data: Array<ICategoryDataItem>) => {
-    console.log('update');
-
-    data = [
-      {
-        name: '视频',
-        value: 1000,
-      },
-      {
-        name: '音乐',
-        value: 500,
-      },
-    ];
     const option = {
       title: {
-        text: '同名数量统计',
-        subtext: '纯属虚构',
+        text: `${
+          pieChartType === EPieChartType.EXPENDITURE ? '支出' : '收入'
+        }分类信息`,
         left: 'center',
       },
       tooltip: {
         trigger: 'item',
-        formatter: '{a} <br/>{b} : {c} ({d}%)',
+        formatter: '{a} {b} : {c} ({d}%)',
       },
       legend: {
         type: 'scroll',
@@ -145,9 +134,9 @@ const Echart = () => {
           type: 'pie',
           radius: '55%',
           center: ['40%', '50%'],
-          data: data.map(({ name, value }) => ({
+          data: data.map(({ name, money }) => ({
             name,
-            value: transferAmount(value, 'yuan'),
+            value: transferAmount(money, 'yuan'),
           })),
           emphasis: {
             itemStyle: {
@@ -160,7 +149,6 @@ const Echart = () => {
       ],
     };
     if (pieChart) {
-      console.log('setoption');
       pieChart.setOption(option);
     }
   };

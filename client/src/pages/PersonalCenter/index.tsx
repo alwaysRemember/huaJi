@@ -10,6 +10,7 @@ import ImagePreload from '../../components/ImagePreload';
 import { setClassName } from '../../utils';
 import { IMenuItem } from './interface';
 import { AtButton, AtList, AtListItem } from 'taro-ui';
+import { loginPath } from '../../router';
 
 const PersonalCenter = () => {
   const dispatch = useDispatch();
@@ -47,7 +48,17 @@ const PersonalCenter = () => {
             </Text>
           </View>
         )) || (
-          <AtButton className={styles['go-login']} type="primary">
+          <AtButton
+            className={styles['go-login']}
+            type="secondary"
+            circle
+            size="small"
+            onClick={() => {
+              Taro.navigateTo({
+                url: loginPath(),
+              });
+            }}
+          >
             去登录
           </AtButton>
         )}

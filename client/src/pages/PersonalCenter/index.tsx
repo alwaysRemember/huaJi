@@ -30,17 +30,27 @@ const PersonalCenter = () => {
   return (
     <ScrollView scrollY className={styles['personal-center-wrapper']}>
       <View className={styles['user-info-wrapper']}>
-        <View className={styles['avatar-wrapper']}>
-          {!!userInfo?.avatarUrl && (
-            <ImagePreload
-              width={150}
-              height={150}
-              borderRadius={75}
-              src={userInfo.avatarUrl}
-            />
-          )}
-        </View>
-        <Text className={styles['username']}>{userInfo?.nickName || ''}</Text>
+        {(!!userInfo && (
+          <View>
+            <View className={styles['avatar-wrapper']}>
+              {!!userInfo?.avatarUrl && (
+                <ImagePreload
+                  width={150}
+                  height={150}
+                  borderRadius={75}
+                  src={userInfo.avatarUrl}
+                />
+              )}
+            </View>
+            <Text className={styles['username']}>
+              {userInfo?.nickName || ''}
+            </Text>
+          </View>
+        )) || (
+          <AtButton className={styles['go-login']} type="primary">
+            去登录
+          </AtButton>
+        )}
       </View>
       <View className={styles['accounting-info']}>
         <View className={setClassName([styles['item'], styles['days']])}>

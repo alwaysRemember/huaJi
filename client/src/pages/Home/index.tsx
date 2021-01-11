@@ -1,5 +1,10 @@
-import Taro, { useDidHide, useDidShow } from '@tarojs/taro';
-import { AtButton, AtIcon, AtLoadMore, AtMessage } from 'taro-ui';
+import Taro, {
+  useDidHide,
+  useDidShow,
+  useRouter,
+  useShareAppMessage,
+} from '@tarojs/taro';
+import { AtButton, AtIcon, AtLoadMore, AtMessage, AtFab } from 'taro-ui';
 import { View, Text, Picker } from '@tarojs/components';
 import React, { useEffect, useRef, useState } from 'react';
 import styles from './index.module.scss';
@@ -18,6 +23,7 @@ import { ECategoryTypeEnum } from '../CategoryList/enums';
 import { IScrollRef } from '../../components/Scroll/interface';
 
 const Home = () => {
+  const { path } = useRouter();
   const date = moment(new Date()).format('YYYY-MM');
   const checkLogin = useCheckLogin();
   const dispatch = useDispatch();
@@ -127,7 +133,12 @@ const Home = () => {
     const monthIndex = selectMonthList.findIndex(v => v === month);
     setCurrentDateIndex([yearIndex + '', monthIndex + '']);
   });
-
+  useShareAppMessage(() => {
+    return {
+      title: '花记账本',
+      path,
+    };
+  });
   return (
     <View className={styles['home-wrapper']}>
       <View className={styles['top-info-wrapper']}>
@@ -269,6 +280,17 @@ const Home = () => {
         </Scroll>
       </View>
       <AtMessage />
+      {/* 分享按钮  */}
+      <AtFab size="small" className={styles['search-btn-wrapper']}>
+        <AtButton
+          size="small"
+          type="primary"
+          openType="share"
+          className={styles['search-btn']}
+        >
+          <AtIcon value="share" size="22" color="#fff" />
+        </AtButton>
+      </AtFab>
     </View>
   );
 };

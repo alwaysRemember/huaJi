@@ -153,4 +153,13 @@
       }
     }
   }
+  .search-btn-wrapper {
+    overflow: hidden;
+    position: fixed;
+    right: 0;
+    bottom: 200px;
+    .search-btn {
+      width: 100%;
+    }
+  }
 }

@@ -8,9 +8,10 @@ import { updateTabBarSelect } from '../../store/actions';
 import styles from './index.module.scss';
 import ImagePreload from '../../components/ImagePreload';
 import { setClassName } from '../../utils';
-import { IMenuItem } from './interface';
+import { IMenuItem, IPersonalCenterResponseData } from './interface';
 import { AtButton, AtList, AtListItem } from 'taro-ui';
 import { loginPath } from '../../router';
+import { request } from '../../utils/wxUtils';
 
 const PersonalCenter = () => {
   const dispatch = useDispatch();
@@ -25,7 +26,19 @@ const PersonalCenter = () => {
         'https://6875-huaji-server-prod-2egmhbb1fd0438-1304528052.tcb.qcloud.la/icon/limit_icon.png?sign=b123f33eed6dc46182af325f343d19c9&t=1610351622',
     },
   ]);
+
+  const getData = async () => {
+    try {
+      const { recordsNumber, accountingDays } = await request<
+        IPersonalCenterResponseData
+      >('getPersonalCenterData');
+      setRecordsNumber(recordsNumber);
+      setAccountingDays(accountingDays);
+    } catch (e) {}
+  };
+
   useDidShow(() => {
+    getData();
     dispatch(updateTabBarSelect(ETabBarEnum.PERSONAL_CENTER));
   });
   return (

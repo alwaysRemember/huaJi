@@ -2,7 +2,7 @@
  * @Author: Always
  * @LastEditors: Always
  * @Date: 2020-12-29 14:02:00
- * @LastEditTime: 2021-01-12 17:11:14
+ * @LastEditTime: 2021-01-12 17:26:55
  * @FilePath: /huaJi/server/getHomeData/index.js
  */
 const cloud = require('wx-server-sdk');
@@ -30,7 +30,7 @@ exports.main = async ({ page, currentDate }) => {
         data: {
           monthMaxMoney: 0,
           amountUsed: 0,
-          unsedAmount: 0,
+          unusedAmount: 0,
           list: [],
           totalPage: 1,
         },

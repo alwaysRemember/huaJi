@@ -10,7 +10,7 @@ import ImagePreload from '../../components/ImagePreload';
 import { setClassName } from '../../utils';
 import { IMenuItem, IPersonalCenterResponseData } from './interface';
 import { AtButton, AtList, AtListItem } from 'taro-ui';
-import { loginPath } from '../../router';
+import { loginPath, updateLimitPath } from '../../router';
 import { request } from '../../utils/wxUtils';
 
 const PersonalCenter = () => {
@@ -21,7 +21,7 @@ const PersonalCenter = () => {
   const [menuList] = useState<Array<IMenuItem>>([
     {
       title: '每月限额',
-      path: '',
+      path: updateLimitPath(),
       iconPath:
         'https://6875-huaji-server-prod-2egmhbb1fd0438-1304528052.tcb.qcloud.la/icon/limit_icon.png?sign=b123f33eed6dc46182af325f343d19c9&t=1610351622',
     },
@@ -99,6 +99,8 @@ const PersonalCenter = () => {
               thumb={iconPath}
               key={title}
               onClick={() => {
+                console.log(path);
+
                 Taro.navigateTo({
                   url: path,
                 });

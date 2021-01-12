@@ -2,7 +2,7 @@
  * @Author: Always
  * @LastEditors: Always
  * @Date: 2020-12-29 14:02:00
- * @LastEditTime: 2020-12-29 18:34:38
+ * @LastEditTime: 2021-01-12 17:11:14
  * @FilePath: /huaJi/server/getHomeData/index.js
  */
 const cloud = require('wx-server-sdk');
@@ -97,7 +97,10 @@ exports.main = async ({ page, currentDate }) => {
         }),
         monthMaxMoney,
         amountUsed,
-        unusedAmount: monthMaxMoney ? monthMaxMoney - amountUsed : 0,
+        unusedAmount:
+          monthMaxMoney && monthMaxMoney - amountUsed > 0
+            ? monthMaxMoney - amountUsed
+            : 0,
       },
       message: '成功',
     };

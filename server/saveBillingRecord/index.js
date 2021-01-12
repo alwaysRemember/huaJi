@@ -2,7 +2,7 @@
  * @Author: Always
  * @LastEditors: Always
  * @Date: 2020-12-28 15:08:50
- * @LastEditTime: 2020-12-29 18:16:15
+ * @LastEditTime: 2021-01-12 17:07:28
  * @FilePath: /huaJi/server/saveBillingRecord/index.js
  */
 
@@ -58,7 +58,8 @@ exports.main = async ({ categoryId, categoryType, date, money, remarks }) => {
       });
       // 获取当前的时间
       const d = new Date(date);
-      const nowTime = `${d.getFullYear()}-${d.getMonth() + 1}`; // YYYY-MM
+      const month = d.getMonth() + 1;
+      const nowTime = `${d.getFullYear()}-${month < 10 ? '0' + month : month}`; // YYYY-MM
 
       // 查询用户已使用数据表，是否有当前用户的使用记录
       const tbUserAmountUsed = transaction.collection('tb_user_amount_used');

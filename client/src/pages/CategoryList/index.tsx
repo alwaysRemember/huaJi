@@ -48,6 +48,12 @@ const CategoryList = () => {
   };
 
   const submit = async ({ remarks, money, date }: IKeyboardInputData) => {
+    if (!money) {
+      showToast({
+        title: '请输入正确的金额',
+      });
+      return;
+    }
     if (!currentCategory) {
       showToast({
         title: '请选择要记录的分类',

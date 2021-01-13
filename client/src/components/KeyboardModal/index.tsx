@@ -57,7 +57,7 @@ const KeyboardModal = ({ cref, submit }: IKeyboardModalProps) => {
       case 13:
         submit({
           remarks,
-          money: Number(money) * 100,
+          money: Number((Number(money) * 100).toFixed(2)),
           date,
         });
         break;
@@ -89,6 +89,7 @@ const KeyboardModal = ({ cref, submit }: IKeyboardModalProps) => {
       });
       return;
     }
+
     setMoney(val);
   };
 

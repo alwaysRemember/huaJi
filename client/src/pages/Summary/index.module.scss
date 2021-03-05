@@ -50,62 +50,66 @@
     }
   }
   .list-wrapper {
-    position: relative;
+    overflow: hidden;
     flex: 1;
-    display: flex;
-    flex-direction: column;
-    .summary-header {
-      height: 100px;
-      .summary-item {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        background: #fff;
-        z-index: 999;
-        .item {
-          .text {
-            font-weight: bold;
-          }
-        }
-      }
-    }
-    .summary-item {
-      display: grid;
-      grid-template-columns: 1fr 2fr 2fr 2fr;
-      border-bottom: 1px solid #efefef;
-      &:nth-child(even) {
-        background: #f7f6f6;
-      }
-      .item {
-        overflow-x: hidden;
-        width: 100%;
-        min-height: 100px;
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        align-items: center;
-        &.label {
-          flex: 1;
-        }
-        .text {
-          display: block;
+    .list-container {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      .summary-header {
+        height: 100px;
+        .summary-item {
+          position: absolute;
+          top: 0;
+          left: 0;
           width: 100%;
-          font-size: 28px;
-          text-align: center;
-          line-height: 32px;
-          word-wrap: break-word;
-          color: #333;
-          &.negative {
-            color: #ff0000;
-            font-weight: bold;
+          background: #fff;
+          z-index: 999;
+          .item {
+            .text {
+              font-weight: bold;
+            }
           }
         }
       }
-    }
-    .list-con {
-      overflow: hidden;
-      flex: 1;
+      .summary-item {
+        display: grid;
+        grid-template-columns: 1fr 2fr 2fr 2fr;
+        border-bottom: 1px solid #efefef;
+        &:nth-child(even) {
+          background: #f7f6f6;
+        }
+        .item {
+          overflow-x: hidden;
+          width: 100%;
+          min-height: 100px;
+          display: flex;
+          flex-direction: row;
+          justify-content: center;
+          align-items: center;
+          &.label {
+            flex: 1;
+          }
+          .text {
+            display: block;
+            width: 100%;
+            font-size: 28px;
+            text-align: center;
+            line-height: 32px;
+            word-wrap: break-word;
+            color: #333;
+            &.negative {
+              color: #ff0000;
+              font-weight: bold;
+            }
+          }
+        }
+      }
+      .list-con {
+        overflow: hidden;
+        flex: 1;
+      }
     }
   }
 }

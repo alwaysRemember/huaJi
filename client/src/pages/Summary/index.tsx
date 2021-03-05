@@ -119,54 +119,61 @@ const Summary = () => {
         </View>
       </View>
       <View className={styles['list-wrapper']}>
-        <View className={styles['summary-header']}>
-          <View className={styles['summary-item']}>
-            <View className={setClassName([styles['item'], styles['label']])}>
-              <Text className={styles['text']}>月份</Text>
-            </View>
-            <View className={styles['item']}>
-              <Text className={styles['text']}>收入</Text>
-            </View>
-            <View className={styles['item']}>
-              <Text className={styles['text']}>支出</Text>
-            </View>
-            <View className={styles['item']}>
-              <Text className={styles['text']}>结余</Text>
+        <View className={styles['list-container']}>
+          <View className={styles['summary-header']}>
+            <View className={styles['summary-item']}>
+              <View className={setClassName([styles['item'], styles['label']])}>
+                <Text className={styles['text']}>月份</Text>
+              </View>
+              <View className={styles['item']}>
+                <Text className={styles['text']}>收入</Text>
+              </View>
+              <View className={styles['item']}>
+                <Text className={styles['text']}>支出</Text>
+              </View>
+              <View className={styles['item']}>
+                <Text className={styles['text']}>结余</Text>
+              </View>
             </View>
           </View>
-        </View>
-        <View className={styles['list-con']}>
-          <Scroll page={1} totalPage={0} updatePage={() => {}} cref={scrollRef}>
-            {list.map(({ id, income, expenditure, label, balance }) => (
-              <View className={styles['summary-item']} key={id}>
-                <View
-                  className={setClassName([styles['item'], styles['label']])}
-                >
-                  <Text className={styles['text']}>{label}</Text>
-                </View>
-                <View className={styles['item']}>
-                  <Text className={styles['text']}>
-                    {transferAmount(income, 'yuan')} 元
-                  </Text>
-                </View>
-                <View className={styles['item']}>
-                  <Text className={styles['text']}>
-                    {transferAmount(expenditure, 'yuan')} 元{' '}
-                  </Text>
-                </View>
-                <View className={styles['item']}>
-                  <Text
-                    className={setClassName([
-                      styles['text'],
-                      balance < 0 ? styles['negative'] : '',
-                    ])}
+          <View className={styles['list-con']}>
+            <Scroll
+              page={1}
+              totalPage={0}
+              updatePage={() => {}}
+              cref={scrollRef}
+            >
+              {list.map(({ id, income, expenditure, label, balance }) => (
+                <View className={styles['summary-item']} key={id}>
+                  <View
+                    className={setClassName([styles['item'], styles['label']])}
                   >
-                    {transferAmount(balance, 'yuan')} 元
-                  </Text>
+                    <Text className={styles['text']}>{label}</Text>
+                  </View>
+                  <View className={styles['item']}>
+                    <Text className={styles['text']}>
+                      {transferAmount(income, 'yuan')} 元
+                    </Text>
+                  </View>
+                  <View className={styles['item']}>
+                    <Text className={styles['text']}>
+                      {transferAmount(expenditure, 'yuan')} 元{' '}
+                    </Text>
+                  </View>
+                  <View className={styles['item']}>
+                    <Text
+                      className={setClassName([
+                        styles['text'],
+                        balance < 0 ? styles['negative'] : '',
+                      ])}
+                    >
+                      {transferAmount(balance, 'yuan')} 元
+                    </Text>
+                  </View>
                 </View>
-              </View>
-            ))}
-          </Scroll>
+              ))}
+            </Scroll>
+          </View>
         </View>
       </View>
     </View>

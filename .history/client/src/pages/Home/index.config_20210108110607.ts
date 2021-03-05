@@ -7,4 +7,5 @@
  */
 export default {
   navigationBarTitleText: '花记账本',
+  disableScroll: true,
 };

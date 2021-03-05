@@ -4,4 +4,4 @@
 **/*.html
 **/dist/
 **/mock/
-.history
+.history/

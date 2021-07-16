@@ -42,14 +42,31 @@ exports.main = async ({ year, month }) => {
       maxDate = new Date(year, month, 0, '12', '59', '59');
       minDate = new Date(`${year}-${month}-1 00:00:00`);
     }
-    //  获取数据
-    const { data: resultList } = await db
+    const getData = async skip => {
+      const { data } = await db
+        .collection('tb_billing_record')
+        .where({
+          userId: resultUser._id,
+          recordDate: _.gte(minDate).and(_.lte(maxDate)),
+        })
+        .skip(skip)
+        .get();
+      return data;
+    };
+    // 获取总数
+    const { total } = await db
       .collection('tb_billing_record')
       .where({
         userId: resultUser._id,
         recordDate: _.gte(minDate).and(_.lte(maxDate)),
       })
-      .get();
+      .count();
+    let resultList = [];
+    // 因为小程序云函数get最多 支持一次100条
+    // 切片获取数据
+    for (let i = 0; i < total; i += 100) {
+      resultList = resultList.concat(await getData(i));
+    }
     // 拼接月份和天数
     const list = [...Array(maxDate.getMonth() + 1).keys()].map(k => {
       const month = k + 1;

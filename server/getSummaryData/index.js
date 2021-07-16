@@ -18,6 +18,18 @@ exports.main = async ({ year }) => {
     maxDate = maxDate.getTime() >= new Date().getTime() ? new Date() : maxDate; // 如果最大时间超出当前的时间 那么使用当前的时间
     const { OPENID: openid } = await cloud.getWXContext();
 
+    const getData = async skip => {
+      const { data } = await db
+        .collection('tb_billing_record')
+        .where({
+          userId: resultUser._id,
+          recordDate: _.gte(minDate).and(_.lte(maxDate)),
+        })
+        .skip(skip)
+        .get();
+      return data;
+    };
+
     // 获取用户
     let { data: resultUser } = await db
       .collection('tb_user')
@@ -41,13 +53,20 @@ exports.main = async ({ year }) => {
     }
     // 获取数据
     const _ = db.command;
-    const { data: resultData } = await db
+    let resultData = [];
+    // 获取总数
+    const { total } = await db
       .collection('tb_billing_record')
       .where({
         userId: resultUser._id,
         recordDate: _.gte(minDate).and(_.lte(maxDate)),
       })
-      .get();
+      .count();
+    // 因为小程序云函数get最多 支持一次100条
+    // 切片获取数据
+    for (let i = 0; i < total; i += 100) {
+      resultData = resultData.concat(await getData(i));
+    }
     const resultList = [...Array(maxDate.getMonth() + 1).keys()].map(k => {
       k++;
       const mounth = k < 10 ? `0${k}` : String(k);
@@ -72,11 +91,9 @@ exports.main = async ({ year }) => {
         message: '成功',
       };
     }
-
     let expenditure = 0,
       income = 0;
     resultData.forEach(({ categoryType, money, recordDate }) => {
-      clearInterval;
       switch (categoryType) {
         case 'export':
           expenditure += money;
